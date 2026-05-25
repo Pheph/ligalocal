@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-header { padding: 2.5rem 0 0; }
+    .page-header h1 { margin-bottom: 0.3rem; }
+
+    .filters {
+      padding: 1.25rem 0;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--brand); color: var(--ink); }
+    .filter-btn.active {
+      background: var(--brand-light);
+      border-color: var(--brand);
+      color: var(--brand-dark);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      padding-bottom: 3rem;
+    }
+
+    .event-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .event-card:hover { border-color: var(--brand); }
+
+    .event-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Fallback se imagem não carregar */
+    .event-img-fallback {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      color: var(--brand);
+    }
+    .event-img-fallback.futebol    { background: var(--brand-light); }
+    .event-img-fallback.basquetebol { background: #EAF3DE; }
+    .event-img-fallback.padel      { background: #FAEEDA; }
+    .event-img-fallback.voleibol   { background: #E6F1FB; }
+
+    .event-body { padding: 1rem; }
+
+    .event-tag {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--brand-dark);
+      background: var(--brand-light);
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.6rem;
+    }
+
+    .event-name {
+      font-family: var(--serif);
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 1rem;
+    }
+    .event-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+    .event-meta-row i { font-size: 13px; color: var(--brand); }
+
+    .event-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .event-vagas { font-size: 12px; color: var(--ink-muted); font-weight: 300; }
+    .event-vagas strong { color: var(--ink); font-weight: 500; }
+    .event-vagas .esgotado { color: var(--danger); font-weight: 500; }
+
+    .btn-inscrever {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--brand);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-inscrever:hover { background: var(--brand-dark); }
+    .btn-inscrever:disabled {
+      background: var(--border);
+      color: var(--ink-muted);
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--ink-muted);
+      font-size: 14px;
+      font-weight: 300;
+    }
+    .empty-state i { font-size: 32px; display: block; margin-bottom: 0.75rem; color: var(--border); }
+
+    /* Modal overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28,31,30,0.5);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      width: 100%;
+      max-width: 400px;
+      padding: 1.75rem;
+      position: relative;
+      transform: translateY(16px) scale(0.97);
+      transition: all 0.25s;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none; border: none;
+      cursor: pointer;
+      color: var(--ink-muted);
+      font-size: 20px;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    .modal-tag {
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--brand-dark); background: var(--brand-light);
+      padding: 2px 8px; border-radius: 4px;
+      display: inline-block; margin-bottom: 0.6rem;
+    }
+
+    .modal h2 {
+      font-family: var(--serif);
+      font-size: 20px; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 0.3rem;
+    }
+    .modal-sub {
+      font-size: 13px; color: var(--ink-muted);
+      font-weight: 300; margin-bottom: 1.25rem;
+    }
+
+    .modal-info {
+      background: var(--surface);
+      border-radius: var(--r-md);
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .modal-info-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--ink-muted); font-weight: 300;
+    }
+    .modal-info-row i { font-size: 14px; color: var(--brand); }
+    .modal-info-row strong { color: var(--ink); font-weight: 500; }
+
+    .modal-field { margin-bottom: 1rem; }
+
+    .modal-success {
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .modal-success i { font-size: 44px; color: var(--brand); display: block; margin-bottom: 0.75rem; }
+    .modal-success h3 {
+      font-family: var(--serif);
+      font-size: 20px; color: var(--ink); margin-bottom: 0.3rem;
+    }
+    .modal-success p { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Início</a>
+          <a href="index.html#como-funciona" class="nav-link">Como funciona</a>
+          <a href="eventos.html" class="nav-link">Eventos</a>
+          <a href="assinatura.html" class="nav-link">Planos</a>
+          <a href="etapa1.html" class="nav-cta">Entrar na liga</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- Header -->
+      <div class="page-header">
+        <h1>Eventos</h1>
+        <p>Jogos abertos e torneios na região de Aveiro — inscreve-te com um clique.</p>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters">
+        <button class="filter-btn active" onclick="filter('todos', this)">Todos</button>
+        <button class="filter-btn" onclick="filter('futebol', this)">Futebol</button>
+        <button class="filter-btn" onclick="filter('basquetebol', this)">Basquetebol</button>
+        <button class="filter-btn" onclick="filter('padel', this)">Padel</button>
+        <button class="filter-btn" onclick="filter('voleibol', this)">Voleibol</button>
+        <button class="filter-btn" onclick="filter('aveiro', this)">Aveiro</button>
+        <button class="filter-btn" onclick="filter('ilhavo', this)">Ílhavo</button>
+        <button class="filter-btn" onclick="filter('ovar', this)">Ovar</button>
+      </div>
+
+      <!-- Grid de eventos -->
+      <div class="events-grid" id="events-grid"></div>
+
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="overlay" id="overlay" onclick="closeModalOverlay(event)">
+    <div class="modal" id="modal">
+      <button class="modal-close" onclick="closeModal()" aria-label="Fechar modal">
+        <i class="ti ti-x"></i>
+      </button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span class="footer-logo">Liga<span>Local</span></span>
+          <span class="footer-location"> · Aveiro</span>
+        </div>
+        <div class="footer-links">
+          <a href="privacidade.html" class="footer-link">Política de Privacidade</a>
+          <a href="termos.html" class="footer-link">Termos de Serviço</a>
+          <a href="mailto:hello@ligalocal.pt" class="footer-link">Contacto</a>
+        </div>
+        <span class="footer-copy">© 2026 Liga Local</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    var events = [
+      {
+        id: 1,
+        nome: 'Torneio 3x3 Aveiro',
+        modalidade: 'basquetebol',
+        zona: 'aveiro',
+        data: '5 Jul', hora: '10h00',
+        local: 'Parque da Balsa',
+        vagas: 8, total: 12,
+        tag: 'Basquetebol',
+        img: 'assets/img/basquetebol.jpg'
+      },
+      {
+        id: 2,
+        nome: 'Futebol de praia',
+        modalidade: 'futebol',
+        zona: 'ilhavo',
+        data: '12 Jul', hora: '16h00',
+        local: 'Praia da Barra',
+        vagas: 6, total: 20,
+        tag: 'Futebol',
+        img: 'assets/img/futebol.jpg'
+      },
+      {
+        id: 3,
+        nome: 'Liga de Padel Ovar',
+        modalidade: 'padel',
+        zona: 'ovar',
+        data: '19 Jul', hora: '09h00',
+        local: 'Clube de Ténis',
+        vagas: 4, total: 16,
+        tag: 'Padel',
+        img: 'assets/img/padel.jpg',
+        imgPosition: 'center 60%',
+        imgHeight: '300px'
+      },
+      {
+        id: 4,
+        nome: 'Pickup basket sextas',
+        modalidade: 'basquetebol',
+        zona: 'aveiro',
+        data: '27 Jun', hora: '21h00',
+        local: 'Parque da Balsa',
+        vagas: 0, total: 10,
+        tag: 'Basquetebol',
+        img: 'assets/img/basquetebol.jpg'
+      },
+      {
+        id: 5,
+        nome: 'Liga Local Verão',
+        modalidade: 'futebol',
+        zona: 'aveiro',
+        data: '2 Ago', hora: '09h00',
+        local: 'Campo Municipal',
+        vagas: 18, total: 32,
+        tag: 'Futebol',
+        img: 'assets/img/futebol.jpg'
+      },
+      {
+        id: 6,
+        nome: 'Volei de praia',
+        modalidade: 'voleibol',
+        zona: 'ilhavo',
+        data: '16 Ago', hora: '11h00',
+        local: 'Costa Nova',
+        vagas: 12, total: 16,
+        tag: 'Voleibol',
+        img: 'assets/img/voleibol.jpg'
+      }
+    ];
+
+    var iconMap = {
+      futebol: 'ti-ball-football',
+      basquetebol: 'ti-ball-basketball',
+      padel: 'ti-racket',
+      voleibol: 'ti-ball-volleyball'
+    };
+
+    function renderEvents(f) {
+      var grid = document.getElementById('events-grid');
+      var filtered = f === 'todos'
+        ? events
+        : events.filter(function(e) { return e.modalidade === f || e.zona === f; });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><i class="ti ti-calendar-off"></i>Sem eventos para este filtro.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function(e) {
+        var esgotado = e.vagas === 0;
+        return (
+          '<div class="event-card">' +
+            '<img class="event-img" src="' + e.img + '" alt="' + e.nome + '" ' +
+              'style="object-position:' + (e.imgPosition || 'center') + ';' + (e.imgHeight ? 'height:' + e.imgHeight + ';' : '') + '" ' +
+              'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" />' +
+            '<div class="event-img-fallback ' + e.modalidade + '" style="display:none;">' +
+              '<i class="ti ' + iconMap[e.modalidade] + '" aria-hidden="true"></i>' +
+            '</div>' +
+            '<div class="event-body">' +
+              '<span class="event-tag">' + e.tag + '</span>' +
+              '<div class="event-name">' + e.nome + '</div>' +
+              '<div class="event-meta">' +
+                '<div class="event-meta-row"><i class="ti ti-calendar" aria-hidden="true"></i>' + e.data + ' · ' + e.hora + '</div>' +
+                '<div class="event-meta-row"><i class="ti ti-map-pin" aria-hidden="true"></i>' + e.local + '</div>' +
+              '</div>' +
+              '<div class="event-footer">' +
+                '<span class="event-vagas">' +
+                  (esgotado
+                    ? '<span class="esgotado">Esgotado</span>'
+                    : '<strong>' + e.vagas + '</strong> vagas restantes') +
+                '</span>' +
+                '<button class="btn-inscrever" ' +
+                  (esgotado ? 'disabled' : 'onclick="openModal(' + e.id + ')"') + '>' +
+                  (esgotado ? 'Esgotado' : 'Inscrever') +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function filter(f, btn) {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderEvents(f);
+    }
+
+    function openModal(id) {
+      var e = events.find(function(ev) { return ev.id === id; });
+      document.getElementById('modal-body').innerHTML =
+        '<div class="modal-tag">' + e.tag + '</div>' +
+        '<h2>' + e.nome + '</h2>' +
+        '<p class="modal-sub">Preenche os teus dados para garantir o teu lugar.</p>' +
+        '<div class="modal-info">' +
+          '<div class="modal-info-row"><i class="ti ti-calendar" aria-hidden="true"></i><span>' + e.data + ' às <strong>' + e.hora + '</strong></span></div>' +
+          '<div class="modal-info-row"><i class="ti ti-map-pin" aria-hidden="true"></i><span>' + e.local + '</span></div>' +
+          '<div class="modal-info-row"><i class="ti ti-users" aria-hidden="true"></i><span><strong>' + e.vagas + '</strong> vagas restantes de ' + e.total + '</span></div>' +
+        '</div>' +
+        '<div class="modal-field">' +
+          '<label class="label" for="m-nome">Nome próprio</label>' +
+          '<input type="text" id="m-nome" class="modal-input" placeholder="Ex: João Silva" />' +
+        '</div>' +
+        '<div class="modal-field">' +
+          '<label class="label" for="m-email">Email <span class="required">*</span></label>' +
+          '<input type="email" id="m-email" class="modal-input" placeholder="o.teu@email.com" />' +
+          '<p class="error-msg" id="err-modal-email">Introduz um email válido.</p>' +
+        '</div>' +
+        '<button class="btn btn-primary btn--full" onclick="submitInscricao(' + e.id + ')">Confirmar inscrição</button>';
+
+      document.getElementById('overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function submitInscricao(id) {
+      var email = document.getElementById('m-email').value.trim();
+      var errEl = document.getElementById('err-modal-email');
+      errEl.style.display = 'none';
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.style.display = 'block';
+        document.getElementById('m-email').style.borderColor = 'var(--danger)';
+        return;
+      }
+
+      document.getElementById('modal-body').innerHTML =
+        '<div class="modal-success">' +
+          '<i class="ti ti-circle-check" aria-hidden="true"></i>' +
+          '<h3>Inscrição confirmada!</h3>' +
+          '<p>Vais receber um email de confirmação em breve.<br>Até lá — aquece bem!</p>' +
+        '</div>';
+    }
+
+    function closeModal() {
+      document.getElementById('overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOverlay(e) {
+      if (e.target === document.getElementById('overlay')) closeModal();
+    }
+
+    document.addEventListener('input', function(e) {
+      if (e.target.id === 'm-email') {
+        e.target.style.borderColor = '';
+      }
+    });
+
+    renderEvents('todos');
+  </script>
+
+</body>
+</html>

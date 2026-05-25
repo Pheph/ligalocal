@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Planos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .pricing-hero { padding: 3.5rem 0 2rem; text-align: center; }
+    .pricing-hero h1 { margin-bottom: 0.5rem; }
+    .pricing-hero p { max-width: 440px; margin: 0 auto 1.5rem; }
+
+    .trial-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--brand-light); color: var(--brand-dark);
+      font-size: 12px; font-weight: 500;
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 2rem;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 620px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+    }
+
+    .plan-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 1.75rem;
+      position: relative;
+    }
+    .plan-card.featured { border: 2px solid var(--brand); }
+
+    .plan-popular {
+      position: absolute; top: -13px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand); color: var(--white);
+      font-size: 11px; font-weight: 500;
+      padding: 3px 14px; border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: 0.75rem;
+    }
+    .plan-card.featured .plan-name { color: var(--brand-dark); }
+
+    .plan-price {
+      font-family: var(--serif);
+      font-size: 38px; letter-spacing: -0.02em;
+      color: var(--ink); line-height: 1; margin-bottom: 0.2rem;
+    }
+    .plan-price-period {
+      font-family: var(--sans);
+      font-size: 13px; color: var(--ink-muted); font-weight: 300;
+    }
+
+    .plan-iva {
+      font-size: 11px; color: var(--ink-muted);
+      font-weight: 300; margin-bottom: 1.25rem;
+    }
+
+    .plan-sub {
+      font-size: 13px; color: var(--ink-muted);
+      font-weight: 300; margin-bottom: 1.25rem;
+    }
+
+    .plan-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 1.25rem; }
+
+    .plan-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+
+    .feat-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; font-weight: 300; line-height: 1.45;
+    }
+    .feat-row i { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .feat-row.yes { color: var(--ink-muted); }
+    .feat-row.yes i { color: var(--brand); }
+    .feat-row.no { color: rgba(28,31,30,0.3); }
+    .feat-row.no i { color: rgba(28,31,30,0.2); }
+
+    .btn-plan {
+      width: 100%; font-family: var(--sans);
+      font-size: 14px; font-weight: 500;
+      border-radius: var(--r-md); padding: 12px;
+      cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-free {
+      background: var(--surface); color: var(--ink-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-free:hover { border-color: var(--ink-muted); color: var(--ink); }
+    .btn-premium { background: var(--brand); color: var(--white); }
+    .btn-premium:hover { background: var(--brand-dark); }
+
+    .plan-note {
+      font-size: 11px; color: var(--ink-muted);
+      text-align: center; margin-top: 0.6rem;
+      font-weight: 300;
+    }
+
+    /* FAQ */
+    .faq-wrap { max-width: 560px; margin: 0 auto; padding-bottom: 3rem; }
+    .faq-wrap h2 { text-align: center; margin-bottom: 1.25rem; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0;
+      font-size: 13px; font-weight: 500; color: var(--ink);
+    }
+    .faq-q i { font-size: 16px; color: var(--ink-muted); transition: transform 0.2s; }
+    .faq-q.open i { transform: rotate(180deg); }
+
+    .faq-a {
+      font-size: 13px; color: var(--ink-muted);
+      font-weight: 300; line-height: 1.6;
+      padding-bottom: 0.9rem;
+      display: none;
+    }
+    .faq-a.open { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Início</a>
+          <a href="index.html#como-funciona" class="nav-link">Como funciona</a>
+          <a href="eventos.html" class="nav-link">Eventos</a>
+          <a href="assinatura.html" class="nav-link">Planos</a>
+          <a href="etapa1.html" class="nav-cta">Entrar na liga</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="pricing-hero">
+      <div class="container">
+        <div class="trial-badge">
+          <i class="ti ti-gift" aria-hidden="true"></i>
+          7 dias grátis — sem cartão necessário
+        </div>
+        <h1>Joga mais.<br>Paga <em>só se gostares.</em></h1>
+        <p>Começa gratuitamente e faz upgrade quando quiseres acesso completo aos eventos e benefícios premium.</p>
+      </div>
+    </section>
+
+    <!-- PLANOS -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="plans-grid">
+
+          <!-- FREE -->
+          <div class="plan-card">
+            <div class="plan-name">Gratuito</div>
+            <div class="plan-price">0€</div>
+            <div class="plan-price-period">/ sempre grátis</div>
+            <div class="plan-iva">&nbsp;</div>
+            <div class="plan-sub">Para quem quer explorar.</div>
+            <hr class="plan-divider" />
+            <div class="plan-features">
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Acesso a eventos gratuitos</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Newsletter semanal com agenda</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Perfil de jogador básico</span></div>
+              <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Acesso prioritário a eventos</span></div>
+              <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Newsletter exclusiva premium</span></div>
+              <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Descontos em parceiros</span></div>
+              <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Vagas garantidas em torneios</span></div>
+            </div>
+            <a href="etapa1.html" class="btn-plan btn-free">
+              Começar grátis
+            </a>
+          </div>
+
+          <!-- PREMIUM -->
+          <div class="plan-card featured">
+            <div class="plan-popular">Mais popular</div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-price">49,20€</div>
+            <div class="plan-price-period">/ mês</div>
+            <div class="plan-iva">IVA (23%) incluído</div>
+            <div class="plan-sub">7 dias grátis para experimentar.</div>
+            <hr class="plan-divider" />
+            <div class="plan-features">
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Acesso a eventos gratuitos</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Newsletter semanal com agenda</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Perfil de jogador completo</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Acesso prioritário a eventos</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Newsletter exclusiva premium</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Descontos em parceiros</span></div>
+              <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Vagas garantidas em torneios</span></div>
+            </div>
+            <button class="btn-plan btn-premium" onclick="window.location.href='etapa1.html'">
+              Experimentar 7 dias grátis
+            </button>
+            <p class="plan-note">Cancelas quando quiseres. Sem compromisso.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container">
+        <div class="faq-wrap">
+          <h2>Perguntas frequentes</h2>
+
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">Como funciona o trial de 7 dias? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Tens acesso completo ao plano Premium durante 7 dias sem qualquer custo. Só é cobrado se decidires continuar após o período de experiência.</div>
+          </div>
+
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">Posso cancelar a qualquer momento? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Sim, podes cancelar quando quiseres sem penalizações. O acesso premium mantém-se até ao fim do período já pago.</div>
+          </div>
+
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">O que muda no acesso prioritário a eventos? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Os membros Premium têm acesso às inscrições 48h antes do público geral. Nos eventos mais populares as vagas esgotam rapidamente — o acesso prioritário garante o teu lugar.</div>
+          </div>
+
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">O que é a newsletter exclusiva premium? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Para além da newsletter semanal, os membros Premium recebem conteúdo adicional — eventos privados, ofertas de parceiros e novidades antes de toda a gente.</div>
+          </div>
+
+          <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q">O IVA já está incluído no preço? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Sim. O valor de 49,20€/mês já inclui IVA à taxa de 23%. O preço base é 40,00€ + 9,20€ de IVA.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <section class="footer-cta">
+      <div class="container">
+        <h2>Experimenta sem risco.</h2>
+        <p>7 dias grátis. Cancelas quando quiseres.</p>
+        <a href="etapa1.html" class="btn btn-white">Começar agora</a>
+      </div>
+    </section>  
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span class="footer-logo">Liga<span>Local</span></span>
+          <span class="footer-location"> · Aveiro</span>
+        </div>
+        <div class="footer-links">
+          <a href="privacidade.html" class="footer-link">Política de Privacidade</a>
+          <a href="termos.html" class="footer-link">Termos de Serviço</a>
+          <a href="mailto:hello@ligalocal.pt" class="footer-link">Contacto</a>
+        </div>
+        <span class="footer-copy">© 2026 Liga Local</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function toggleFaq(el) {
+      var q = el.querySelector('.faq-q');
+      var a = el.querySelector('.faq-a');
+      q.classList.toggle('open');
+      a.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

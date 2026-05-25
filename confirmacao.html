@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Confirmação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <span style="font-size:13px;color:var(--ink-muted);font-weight:300;">Revisão da subscrição</span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrap">
+      <div class="container--sm">
+
+        <!-- Progresso -->
+        <div class="progress-wrap">
+          <div class="step-bars">
+            <div class="bar done"></div>
+            <div class="bar done"></div>
+            <div class="bar done"></div>
+          </div>
+          <span class="progress-label">Confirmação — revê os teus dados antes de submeter</span>
+        </div>
+
+        <!-- Card principal -->
+        <div class="card">
+
+          <!-- Header -->
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+            <i class="ti ti-user-check" style="font-size:20px;color:var(--brand);"></i>
+          </div>
+          <div class="form-header">
+            <h1>Tudo certo?</h1>
+            <p>Revê os teus dados antes de confirmar. Podes editar qualquer secção.</p>
+          </div>
+
+          <!-- Dados pessoais -->
+          <span class="confirm-section-label">Dados pessoais</span>
+          <div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Nome</span>
+              <span class="confirm-row-value" id="conf-nome">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Email</span>
+              <span class="confirm-row-value" id="conf-email">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Localização</span>
+              <span class="confirm-row-value" id="conf-local">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Ano de nascimento</span>
+              <span class="confirm-row-value" id="conf-ano">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Género</span>
+              <span class="confirm-row-value" id="conf-genero">—</span>
+            </div>
+          </div>
+          <a href="etapa1.html" class="edit-link">
+            <i class="ti ti-edit" style="font-size:12px;"></i> Editar dados pessoais
+          </a>
+
+          <hr class="field-divider" />
+
+          <!-- Perfil de jogador -->
+          <span class="confirm-section-label">Perfil de jogador</span>
+          <div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Modalidades</span>
+              <div class="confirm-chips" id="conf-modalidades"></div>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Nível</span>
+              <span class="confirm-row-value" id="conf-nivel">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Disponibilidade</span>
+              <span class="confirm-row-value" id="conf-disponibilidade">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Frequência</span>
+              <span class="confirm-row-value" id="conf-frequencia">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Como nos conheceste</span>
+              <span class="confirm-row-value" id="conf-origem">—</span>
+            </div>
+          </div>
+          <a href="etapa2.html" class="edit-link">
+            <i class="ti ti-edit" style="font-size:12px;"></i> Editar perfil de jogador
+          </a>
+
+          <hr class="field-divider" />
+
+          <!-- Consentimentos -->
+          <span class="confirm-section-label">Consentimentos</span>
+          <div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Newsletter Liga Local</span>
+              <span class="confirm-row-value" id="conf-marketing">—</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Política de Privacidade e ToS</span>
+              <span class="confirm-row-value" style="color:var(--brand);"><i class="ti ti-check" style="font-size:13px;"></i> Aceite</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Comunicações de parceiros</span>
+              <span class="confirm-row-value" id="conf-partners">—</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Aviso double opt-in -->
+        <div class="notice-box" style="margin-top:1rem;">
+          <i class="ti ti-mail" style="font-size:18px;color:var(--brand);flex-shrink:0;margin-top:1px;"></i>
+          <p>Após confirmares, receberás um <strong>email de confirmação</strong> em <strong id="conf-email-notice">—</strong>. Verifica a tua caixa de entrada para ativar a subscrição.</p>
+        </div>
+
+        <!-- Botões -->
+        <button class="btn btn-primary btn--full" id="btn-confirmar" onclick="handleConfirm()">
+          Confirmar subscrição
+        </button>
+        <a href="etapa2.html" class="btn btn-ghost btn--full" style="margin-top:8px;">
+          Voltar e editar
+        </a>
+
+        <p style="font-size:11px;color:var(--ink-muted);text-align:center;margin-top:1rem;line-height:1.6;">
+          Os teus dados são tratados de acordo com o RGPD. Podes cancelar a subscrição a qualquer momento.
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    /* ── EmailJS — substitui pelos teus valores ── */
+    const EMAILJS_PUBLIC_KEY  = 'B6_UBy6YEoXaJ5XAf';
+    const EMAILJS_SERVICE_ID  = 'service_kcu8u2e';
+    const EMAILJS_TEMPLATE_ID = 'template_36p7z8t';
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    /* ── Mapeamento de labels ── */
+    const localLabels = {
+      aveiro: 'Aveiro cidade', ilhavo: 'Ílhavo', ovar: 'Ovar',
+      agueda: 'Águeda', oliveira: 'Oliveira do Bairro',
+      estarreja: 'Estarreja', murtosa: 'Murtosa', outra: 'Outra'
+    };
+    const generoLabels = { m: 'Masculino', f: 'Feminino', outro: 'Outro' };
+    const modalidadeLabels = {
+      futebol: 'Futebol', basquetebol: 'Basquetebol', futsal: 'Futsal',
+      padel: 'Padel', voleibol: 'Voleibol', outra: 'Outra'
+    };
+    const nivelLabels = { casual: 'Casual', intermedio: 'Intermédio', competitivo: 'Competitivo' };
+    const dispLabels  = { semana: 'Semana', fds: 'Fim de semana', ambos: 'Ambos' };
+    const freqLabels  = { semanal: 'Semanal', quinzenal: 'Quinzenal', mensal: 'Mensal' };
+    const origemLabels = {
+      instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok',
+      amigo: 'Um amigo indicou', escola: 'Escola / Universidade',
+      ginasio: 'Ginásio / Campo desportivo', google: 'Pesquisa no Google',
+      evento: 'Num evento', outro: 'Outro'
+    };
+
+    function setVal(id, text) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (text) {
+        el.textContent = text;
+        el.classList.remove('empty');
+      } else {
+        el.textContent = 'Não indicado';
+        el.classList.add('empty');
+      }
+    }
+
+    function setConsent(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (value === true || value === 'true') {
+        el.style.color = 'var(--brand)';
+        el.innerHTML = '<i class="ti ti-check" style="font-size:13px;"></i> Aceite';
+      } else {
+        el.classList.add('empty');
+        el.textContent = 'Não aceite';
+      }
+    }
+
+    /* ── Preencher com dados do localStorage ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Carregar estado salvo
+      let state = {};
+      try {
+        const saved = localStorage.getItem('ll_state');
+        if (saved) state = JSON.parse(saved);
+      } catch (e) {}
+
+      const nome        = state.nome            || localStorage.getItem('ll_nome') || '';
+      const email       = state.email           || localStorage.getItem('ll_email') || '';
+      const local       = state.localidade      || localStorage.getItem('ll_local') || '';
+      const ano         = state.ano             || '';
+      const genero      = state.genero          || '';
+      const modalidades = state.modalidades     || [];
+      const nivel       = state.nivel           || '';
+      const disp        = state.disponibilidade || '';
+      const freq        = state.frequencia      || '';
+      const origem      = state.origem          || '';
+      const marketing   = state.marketing !== undefined ? state.marketing : localStorage.getItem('ll_marketing');
+      const partners    = state.partners !== undefined ? state.partners : localStorage.getItem('ll_partners');
+      
+      const modalStr = JSON.stringify(modalidades);
+
+      setVal('conf-nome',            nome);
+      setVal('conf-email',           email);
+      setVal('conf-local',           localLabels[local]);
+      setVal('conf-ano',             ano);
+      setVal('conf-genero',          generoLabels[genero]);
+      setVal('conf-nivel',           nivelLabels[nivel]);
+      setVal('conf-disponibilidade', dispLabels[disp]);
+      setVal('conf-frequencia',      freqLabels[freq]);
+      setVal('conf-origem',          origemLabels[origem]);
+
+      const noticeEl = document.getElementById('conf-email-notice');
+      if (noticeEl) noticeEl.textContent = email || '—';
+
+      /* Modalidades */
+      const modalidadesList = JSON.parse(modalStr);
+      const chipsEl = document.getElementById('conf-modalidades');
+      if (chipsEl) {
+        if (modalidadesList.length) {
+          chipsEl.innerHTML = modalidadesList
+            .map(m => `<span class="confirm-chip">${modalidadeLabels[m] || m}</span>`)
+            .join('');
+        } else {
+          chipsEl.innerHTML = '<span class="confirm-row-value empty">Não indicado</span>';
+        }
+      }
+
+      setConsent('conf-marketing', marketing);
+      setConsent('conf-partners',  partners);
+    });
+
+    /* ── Confirmar e enviar email ── */
+    function handleConfirm() {
+      const btn = document.getElementById('btn-confirmar');
+      btn.disabled = true;
+      btn.textContent = 'A enviar...';
+
+      // Carregar estado salvo
+      let state = {};
+      try {
+        const saved = localStorage.getItem('ll_state');
+        if (saved) state = JSON.parse(saved);
+      } catch (e) {}
+
+      const nome      = state.nome             || '';
+      const email     = state.email            || '';
+      const modalidades = state.modalidades    || [];
+      const modalTxt  = modalidades.map(m => modalidadeLabels[m] || m).join(', ');
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_name:         nome        || 'Jogador',
+        to_email:        email,
+        local:           localLabels[state.localidade]       || 'Não indicado',
+        modalidades:     modalTxt                            || 'Não indicado',
+        nivel:           nivelLabels[state.nivel]            || 'Não indicado',
+        disponibilidade: dispLabels[state.disponibilidade]   || 'Não indicado',
+        frequencia:      freqLabels[state.frequencia]        || 'Não indicado',
+      }).then(() => {
+        window.location.href = 'sucesso.html';
+      }).catch(() => {
+        // Redireciona mesmo assim — não bloqueia o utilizador por falha de email
+        window.location.href = 'sucesso.html';
+      });
+    }
+  </script>
+</body>
+</html>

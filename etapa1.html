@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Subscrição — Etapa 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <a href="index.html" class="nav-back">
+          <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrap">
+      <div class="container--sm">
+
+        <!-- Progresso -->
+        <div class="progress-wrap">
+          <div class="step-bars">
+            <div class="bar active"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          <span class="progress-label">Etapa 1 de 3 — o essencial</span>
+        </div>
+
+        <!-- Card -->
+        <div class="card">
+
+          <div class="form-header">
+            <h1>Vamos começar</h1>
+            <p>Precisamos de alguns dados básicos para te colocar na lista certa.</p>
+          </div>
+
+          <!-- Nome -->
+          <div class="field">
+            <label class="label" for="nome">Nome próprio</label>
+            <input type="text" id="nome" placeholder="Ex: João Silva" autocomplete="given-name" />
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <label class="label" for="email">Email <span class="required">*</span></label>
+            <input type="email" id="email" placeholder="o.teu@email.com" autocomplete="email" />
+            <p class="error-msg" id="err-email">Introduz um email válido.</p>
+          </div>
+
+          <!-- Localização -->
+          <div class="field">
+            <label class="label" for="local">Localização <span class="required">*</span></label>
+            <select id="local">
+              <option value="" disabled selected>Seleciona a tua zona</option>
+              <option value="aveiro">Aveiro cidade</option>
+              <option value="ilhavo">Ílhavo</option>
+              <option value="ovar">Ovar</option>
+              <option value="agueda">Águeda</option>
+              <option value="oliveira">Oliveira do Bairro</option>
+              <option value="estarreja">Estarreja</option>
+              <option value="murtosa">Murtosa</option>
+              <option value="outra">Outra</option>
+            </select>
+            <p class="error-msg" id="err-local">Seleciona a tua localização.</p>
+          </div>
+
+          <hr class="field-divider" />
+          <span class="divider-label">Consentimentos</span>
+
+          <!-- Newsletter -->
+          <div class="check-row">
+            <input type="checkbox" id="marketing" />
+            <label class="check-label" for="marketing">
+              Aceito receber a newsletter da Liga Local com informações sobre jogos, eventos e novidades na região de Aveiro.
+            </label>
+          </div>
+
+          <!-- Privacidade + ToS -->
+          <div class="check-row">
+            <input type="checkbox" id="privacy" />
+            <label class="check-label" for="privacy">
+              Li e aceito a <a href="privacidade.html">Política de Privacidade</a> e os <a href="termos.html">Termos de Serviço</a> da Liga Local. <span class="required">*</span>
+            </label>
+          </div>
+          <p class="error-msg" id="err-privacy">Tens de aceitar para continuar.</p>
+
+          <!-- Parceiros -->
+          <div class="check-row" style="margin-bottom:1.25rem;">
+            <input type="checkbox" id="partners" />
+            <label class="check-label" for="partners">
+              Aceito receber comunicações de parceiros e patrocinadores da Liga Local <span class="label-optional">(opcional)</span>.
+            </label>
+          </div>
+
+          <!-- reCAPTCHA -->
+          <div class="recaptcha-box">
+            <div class="rc-check" id="rc-check" onclick="toggleRC()" role="checkbox" aria-checked="false" aria-label="Não sou um robô">
+              <i class="ti ti-check"></i>
+            </div>
+            <span style="font-size:13px;color:var(--ink);">Não sou um robô</span>
+            <div class="rc-brand">
+              <i class="ti ti-refresh"></i>
+              <span>reCAPTCHA</span>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-primary btn--full" id="btn-continuar" onclick="handleSubmit()" disabled style="opacity:.45;cursor:not-allowed;">
+            Continuar para o perfil de jogador
+          </button>
+
+          <p style="font-size:11px;color:var(--ink-muted);text-align:center;margin-top:0.75rem;">
+            Os campos com <span class="required">*</span> são obrigatórios.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    var rcDone = false;
+
+    function toggleRC() {
+      rcDone = !rcDone;
+      var el  = document.getElementById('rc-check');
+      var btn = document.getElementById('btn-continuar');
+      el.classList.toggle('checked', rcDone);
+      el.setAttribute('aria-checked', rcDone);
+      btn.disabled     = !rcDone;
+      btn.style.opacity = rcDone ? '1' : '.45';
+      btn.style.cursor  = rcDone ? 'pointer' : 'not-allowed';
+    }
+
+    function handleSubmit() {
+      var email   = document.getElementById('email').value.trim();
+      var local   = document.getElementById('local').value;
+      var privacy = document.getElementById('privacy').checked;
+      var valid   = true;
+
+      document.getElementById('err-email').style.display   = 'none';
+      document.getElementById('err-local').style.display   = 'none';
+      document.getElementById('err-privacy').style.display = 'none';
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('err-email').style.display = 'block'; valid = false;
+      }
+      if (!local) {
+        document.getElementById('err-local').style.display = 'block'; valid = false;
+      }
+      if (!privacy) {
+        document.getElementById('err-privacy').style.display = 'block'; valid = false;
+      }
+      if (!valid) return;
+      if (!rcDone) { alert('Confirma que não és um robô antes de continuar.'); return; }
+
+      const nome      = document.getElementById('nome').value.trim();
+      const stateData = {
+        nome: nome,
+        email: email,
+        localidade: local,
+        marketing: document.getElementById('marketing').checked,
+        partners: document.getElementById('partners').checked
+      };
+
+      localStorage.setItem('ll_nome',      nome);
+      localStorage.setItem('ll_email',     email);
+      localStorage.setItem('ll_local',     local);
+      localStorage.setItem('ll_marketing', document.getElementById('marketing').checked);
+      localStorage.setItem('ll_partners',  document.getElementById('partners').checked);
+      localStorage.setItem('ll_state',     JSON.stringify(stateData));
+
+      window.location.href = 'etapa2.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Subscrição — Etapa 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <a href="etapa1.html" class="nav-back">
+          <i class="ti ti-arrow-left"></i> Voltar
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrap">
+      <div class="container--sm">
+
+        <!-- Progresso -->
+        <div class="progress-wrap">
+          <div class="step-bars">
+            <div class="bar done"></div>
+            <div class="bar active"></div>
+            <div class="bar"></div>
+          </div>
+          <span class="progress-label">Etapa 2 de 3 — perfil de jogador</span>
+        </div>
+
+        <!-- Card -->
+        <div class="card">
+
+          <div class="form-header">
+            <h1>O teu perfil de jogador</h1>
+            <p>Diz-nos o que jogas para te ligarmos aos jogos certos.</p>
+          </div>
+
+          <!-- 1. Ano + Género -->
+          <div class="select-grid-2" style="margin-bottom:1.25rem;">
+            <div>
+              <label class="label" for="ano-nasc">Ano de nascimento <span class="required">*</span></label>
+              <select id="ano-nasc">
+                <option value="" disabled selected>Seleciona</option>
+              </select>
+              <p class="error-msg" id="err-ano">Campo obrigatório.</p>
+            </div>
+            <div>
+              <label class="label">Género <span class="required">*</span></label>
+              <div class="chips-col" id="chips-genero">
+                <div class="chip" data-val="m" onclick="toggleGenero(this)">Masculino</div>
+                <div class="chip" data-val="f" onclick="toggleGenero(this)">Feminino</div>
+                <div class="chip" data-val="outro" onclick="toggleGenero(this)">Outro</div>
+              </div>
+              <p class="error-msg" id="err-genero">Campo obrigatório.</p>
+            </div>
+          </div>
+
+          <!-- 2. Modalidades -->
+          <div class="field">
+            <label class="label">
+              Modalidades <span class="required">*</span>
+              <span class="label-sub">— escolhe todas as que jogas</span>
+            </label>
+            <div class="chips" id="chips-modalidades">
+              <div class="chip" data-val="futebol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-football"></i> Futebol</div>
+              <div class="chip" data-val="basquetebol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-basketball"></i> Basquetebol</div>
+              <div class="chip" data-val="futsal" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-football"></i> Futsal</div>
+              <div class="chip" data-val="padel" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-tennis"></i> Padel</div>
+              <div class="chip" data-val="voleibol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-volleyball"></i> Voleibol</div>
+              <div class="chip" data-val="outra" onclick="toggleChip(this,'modalidades')"><i class="ti ti-plus"></i> Outra</div>
+            </div>
+            <p class="error-msg" id="err-modalidades">Seleciona pelo menos uma modalidade.</p>
+          </div>
+
+          <!-- 3. Nível -->
+          <div class="field">
+            <label class="label">Nível <span class="label-optional">— opcional</span></label>
+            <div class="select-grid-3">
+              <div class="sel-card" data-val="casual" onclick="selectSingle(this,'nivel')">
+                <div class="sel-card-icon"><i class="ti ti-mood-smile"></i></div>
+                <div class="sel-card-name">Casual</div>
+                <div class="sel-card-desc">Jogo por diversão</div>
+              </div>
+              <div class="sel-card" data-val="intermedio" onclick="selectSingle(this,'nivel')">
+                <div class="sel-card-icon"><i class="ti ti-flame"></i></div>
+                <div class="sel-card-name">Intermédio</div>
+                <div class="sel-card-desc">Gosto de me superar</div>
+              </div>
+              <div class="sel-card" data-val="competitivo" onclick="selectSingle(this,'nivel')">
+                <div class="sel-card-icon"><i class="ti ti-trophy"></i></div>
+                <div class="sel-card-name">Competitivo</div>
+                <div class="sel-card-desc">Jogo a sério</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Disponibilidade -->
+          <div class="field">
+            <label class="label">Disponibilidade <span class="label-optional">— opcional</span></label>
+            <div class="select-grid-3">
+              <div class="sel-card" data-val="semana" onclick="selectSingle(this,'disponibilidade')">
+                <div class="sel-card-icon"><i class="ti ti-briefcase"></i></div>
+                <div class="sel-card-name">Semana</div>
+              </div>
+              <div class="sel-card" data-val="fds" onclick="selectSingle(this,'disponibilidade')">
+                <div class="sel-card-icon"><i class="ti ti-sun"></i></div>
+                <div class="sel-card-name">Fim de semana</div>
+              </div>
+              <div class="sel-card" data-val="ambos" onclick="selectSingle(this,'disponibilidade')">
+                <div class="sel-card-icon"><i class="ti ti-calendar"></i></div>
+                <div class="sel-card-name">Ambos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Frequência -->
+          <div class="field">
+            <label class="label">Frequência preferida <span class="label-optional">— opcional</span></label>
+            <div class="select-grid-3">
+              <div class="sel-card" data-val="semanal" onclick="selectSingle(this,'frequencia')">
+                <div class="sel-card-icon"><i class="ti ti-calendar-week"></i></div>
+                <div class="sel-card-name">Semanal</div>
+                <div class="sel-card-desc">Toda a semana</div>
+              </div>
+              <div class="sel-card" data-val="quinzenal" onclick="selectSingle(this,'frequencia')">
+                <div class="sel-card-icon"><i class="ti ti-calendar-stats"></i></div>
+                <div class="sel-card-name">Quinzenal</div>
+                <div class="sel-card-desc">De 2 em 2 semanas</div>
+              </div>
+              <div class="sel-card" data-val="mensal" onclick="selectSingle(this,'frequencia')">
+                <div class="sel-card-icon"><i class="ti ti-calendar-month"></i></div>
+                <div class="sel-card-name">Mensal</div>
+                <div class="sel-card-desc">Uma vez por mês</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Onde ouviste -->
+          <div class="field">
+            <label class="label" for="origem">Onde ouviste falar de nós? <span class="label-optional">— opcional</span></label>
+            <select id="origem">
+              <option value="" disabled selected>Seleciona uma opção</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="tiktok">TikTok</option>
+              <option value="amigo">Um amigo indicou</option>
+              <option value="escola">Escola / Universidade</option>
+              <option value="ginasio">Ginásio / Campo desportivo</option>
+              <option value="google">Pesquisa no Google</option>
+              <option value="evento">Num evento</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <hr class="field-divider" style="margin-top:0.5rem;" />
+
+          <!-- Submit -->
+          <button class="btn btn-primary btn--full" onclick="handleSubmit()">
+            Concluir subscrição
+          </button>
+
+          <p style="font-size:11px;color:var(--ink-muted);text-align:center;margin-top:0.75rem;">
+            Os campos com <span class="required">*</span> são obrigatórios. Os restantes são opcionais.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    /* Preencher anos */
+    const sel = document.getElementById('ano-nasc');
+    for (let y = 2016; y >= 1956; y--) {
+      const o = document.createElement('option');
+      o.value = y; o.textContent = y; sel.appendChild(o);
+    }
+
+    function handleSubmit() {
+      document.getElementById('err-ano').style.display        = 'none';
+      document.getElementById('err-genero').style.display     = 'none';
+      document.getElementById('err-modalidades').style.display = 'none';
+
+      var valid = true;
+      if (!document.getElementById('ano-nasc').value) {
+        document.getElementById('err-ano').style.display = 'block'; valid = false;
+      }
+      if (!window._state?.genero) {
+        document.getElementById('err-genero').style.display = 'block'; valid = false;
+      }
+      if (!window._state?.modalidades?.length) {
+        document.getElementById('err-modalidades').style.display = 'block'; valid = false;
+      }
+      if (!valid) return;
+
+      // Salvar dados
+      window._state.ano = document.getElementById('ano-nasc').value;
+      window._state.origem = document.getElementById('origem').value || '';
+
+      // Guardar em localStorage para persistência
+      localStorage.setItem('ll_state', JSON.stringify(window._state));
+
+      window.location.href = 'confirmacao.html';
+    }
+
+    // Carregar estado ao chegar à página
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window._state) window._state = {};
+      try {
+        const saved = localStorage.getItem('ll_state');
+        if (saved) {
+          window._state = JSON.parse(saved);
+        } else {
+          window._state = {
+            nome: localStorage.getItem('ll_nome') || '',
+            email: localStorage.getItem('ll_email') || '',
+            localidade: localStorage.getItem('ll_local') || '',
+            marketing: localStorage.getItem('ll_marketing'),
+            partners: localStorage.getItem('ll_partners')
+          };
+        }
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>
