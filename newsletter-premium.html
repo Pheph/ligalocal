@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Newsletter Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,700;9..144,1,600;9..144,1,800;9..144,1,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #0e1512;
+      --bg-2:     #121a17;
+      --ink:      #f3f5f3;
+      --ink-dim:  #aab2ad;
+      --line:     rgba(255,255,255,.08);
+      --accent:   #2ec48a;
+      --accent-2: #1f8a5b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Inter", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAVBAR ── */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 48px;
+      background: linear-gradient(
+        180deg,
+        rgba(14,21,18,.95) 0%,
+        rgba(14,21,18,.70) 60%,
+        rgba(14,21,18,0)   100%
+      );
+      backdrop-filter: blur(10px);
+    }
+    .brand { font-family: "Fraunces", serif; font-weight: 800; font-size: 22px; letter-spacing: -.01em; }
+    .brand .b { color: var(--ink); }
+    .brand .l { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; font-size: 14px; color: var(--ink-dim); }
+    .nav-links a:hover { color: var(--ink); transition: color .2s; }
+    .premium-badge {
+      display: inline-flex; gap: 8px; align-items: center;
+      padding: 8px 16px;
+      border: 1px solid var(--accent); border-radius: 999px;
+      color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    }
+
+    /* ── HERO — cream bg + player overlay ── */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 74px);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    /* Cream/warm backdrop — matches the white BG of the tennis photo so it dissolves */
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0; z-index: -2;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 40%, #ffffff 0%, #f6f3ec 55%, #ece6d6 100%);
+    }
+    /* Soft green glow at the floor — court edge */
+    .hero::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 30% at 50% 110%, rgba(46,196,138,.22), transparent 70%);
+    }
+
+    .hero-inner {
+      position: relative;
+      height: calc(100vh - 74px);
+      min-height: 720px;
+      padding: 0 48px 48px;
+    }
+
+    /* Slug ribbon */
+    .hero-slug {
+      position: absolute; left: 48px; top: 40px;
+      display: flex; align-items: center; gap: 14px;
+      font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent-2); font-weight: 700;
+    }
+    .hero-slug .bar { width: 48px; height: 2px; background: var(--accent); border-radius: 2px; }
+
+    /* MASSIVE headline — sits at z-index 1, player at z-index 2 crosses it */
+    .headline {
+      position: absolute;
+      left: 48px; right: 48px;
+      top: 50%; transform: translateY(-52%);
+      font-family: "Fraunces", serif;
+      font-weight: 900; font-style: italic;
+      color: #0e1512;
+      line-height: .82;
+      letter-spacing: -.04em;
+      font-size: clamp(120px, 19vw, 320px);
+      pointer-events: none; user-select: none;
+      z-index: 1;
+    }
+    .headline .row { display: block; }
+    .headline .r2 { padding-left: 8vw; }
+    .headline .dot { color: var(--accent); }
+
+    /* Ground shadow under player */
+    .ground-shadow {
+      position: absolute; left: 50%; bottom: 4%;
+      width: 38vw; max-width: 520px; height: 28px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(20,30,25,.35), transparent 70%);
+      filter: blur(10px); z-index: 1;
+    }
+
+    /* Player photo — z-index 2 so limbs cross in FRONT of the letters */
+    .player {
+      position: absolute;
+      left: 50%; bottom: 0;
+      transform: translateX(-50%);
+      width: min(56vw, 780px);
+      height: 110%; z-index: 2;
+      /* multiply drops the near-white background against the cream hero */
+      mix-blend-mode: multiply;
+    }
+    .player img {
+      width: 100%; height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: 50% 100%;
+    }
+
+    /* Bottom-left info card (glassmorphism over the dark edge of the hero) */
+    .hero-card {
+      position: absolute; left: 48px; bottom: 48px; z-index: 3;
+      width: 340px; padding: 24px 26px 22px;
+      background: rgba(14,21,18,.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px; color: var(--ink);
+    }
+    .hero-card .kicker {
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px; font-weight: 600;
+    }
+    .hero-card h3 {
+      font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+      font-size: 24px; line-height: 1.15; margin: 0 0 14px; letter-spacing: -.01em;
+    }
+    .hero-card p { font-size: 14px; line-height: 1.5; color: var(--ink-dim); margin: 0 0 18px; }
+    .hero-card .cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 11px 18px; border-radius: 999px;
+      background: var(--accent); color: #0a1410; font-weight: 600; font-size: 14px;
+      border: none; cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .hero-card .cta:hover { transform: translateX(2px); background: #36d796; }
+    .hero-card .cta svg { width: 16px; height: 16px; }
+
+    /* Right score chip */
+    .hero-chip {
+      position: absolute; right: 48px; bottom: 48px; z-index: 3;
+      display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+    }
+    .hero-chip .big {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 800;
+      font-size: 64px; line-height: 1; color: var(--accent-2);
+    }
+    .hero-chip .lbl {
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: #6b746e; font-weight: 600;
+    }
+
+    /* ── BELOW THE FOLD ── */
+
+    /* Stats strip */
+    .strip {
+      background: var(--accent-2); padding: 1.75rem 3rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem;
+    }
+    .strip-stat { display: flex; flex-direction: column; gap: 3px; }
+    .strip-num {
+      font-family: "Fraunces", serif; font-size: 34px; color: var(--ink); line-height: 1;
+    }
+    .strip-label {
+      font-size: 11px; color: rgba(255,255,255,.55); font-weight: 400;
+      text-transform: uppercase; letter-spacing: .07em;
+    }
+    .strip-div { width: 1px; height: 44px; background: rgba(255,255,255,.2); }
+
+    /* Shared section label */
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .6rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before { content: ''; width: 28px; height: 1.5px; background: var(--accent); }
+
+    /* 2-col intro */
+    .intro {
+      background: rgba(255,255,255,.03); border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .intro-text {
+      padding: 5rem 3rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .intro-text h2 {
+      font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+      font-size: clamp(32px, 4.5vw, 52px); color: var(--ink);
+      letter-spacing: -.025em; line-height: 1.05; margin: 1rem 0;
+    }
+    .intro-text p { font-size: 15px; color: var(--ink-dim); line-height: 1.75; max-width: 380px; }
+    .intro-img { overflow: hidden; min-height: 420px; }
+    .intro-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.65) saturate(.75); }
+
+    /* Feature heading */
+    .feature {
+      background: var(--bg-2); border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: 1.25fr .75fr; min-height: 380px;
+    }
+    .feature-text {
+      padding: 4.5rem 3rem;
+      display: flex; flex-direction: column; justify-content: center; gap: 2.5rem;
+    }
+    .feature-heading {
+      font-family: "Fraunces", serif; font-weight: 800;
+      font-size: clamp(40px, 6vw, 68px);
+      color: var(--ink); line-height: .95; letter-spacing: -.03em;
+    }
+    .feature-stat {
+      display: flex; align-items: center; gap: 1.25rem;
+      padding-top: 2rem; border-top: 1px solid var(--line);
+    }
+    .feature-stat-num { font-family: "Fraunces", serif; font-size: 52px; color: var(--accent); line-height: 1; }
+    .feature-stat-label { font-size: 13px; color: var(--ink-dim); line-height: 1.55; }
+    .feature-img { overflow: hidden; }
+    .feature-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.55) saturate(.75); }
+
+    /* Events */
+    .events { background: var(--bg); padding: 5rem 3rem; border-top: 1px solid var(--line); }
+    .section-hdr { margin-bottom: 2.5rem; }
+    .section-hdr h2 {
+      font-family: "Fraunces", serif; font-weight: 700;
+      font-size: clamp(30px, 4vw, 42px); color: var(--ink); letter-spacing: -.02em;
+    }
+    .events-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .event-card {
+      border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem;
+      background: rgba(255,255,255,.03);
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: border-color .2s, background .2s;
+    }
+    .event-card:hover { border-color: rgba(46,196,138,.4); background: rgba(46,196,138,.04); }
+    .event-sport {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .event-sport svg { width: 15px; height: 15px; }
+    .event-title {
+      font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+      font-size: 20px; color: var(--ink); letter-spacing: -.01em; line-height: 1.2;
+    }
+    .event-meta { display: flex; flex-direction: column; gap: 5px; }
+    .event-meta-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: var(--ink-dim);
+    }
+    .event-meta-item svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; }
+    .event-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1rem; border-top: 1px solid var(--line); margin-top: auto;
+    }
+    .event-vagas { font-size: 12px; color: var(--ink-dim); }
+    .event-vagas .urgente { color: #f87171; font-weight: 600; }
+    .event-vagas .ok { color: #4ade80; font-weight: 600; }
+    .event-btn {
+      font-family: "Inter", sans-serif; font-size: 13px; font-weight: 600;
+      background: var(--accent); color: #0a1410;
+      border: none; border-radius: 999px; padding: 8px 18px; cursor: pointer;
+      transition: background .2s;
+    }
+    .event-btn:hover { background: #36d796; }
+
+    /* Ranking */
+    .ranking { background: var(--bg); padding: 0 3rem 5rem; }
+    .ranking-card {
+      background: rgba(255,255,255,.03); border: 1px solid var(--line);
+      border-radius: 12px; padding: 2rem;
+    }
+    .ranking-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;
+    }
+    .ranking-header h3 {
+      font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+      font-size: 22px; color: var(--ink);
+    }
+    .ranking-view {
+      font-size: 13px; color: var(--accent); font-weight: 500; cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .ranking-rows { display: flex; flex-direction: column; gap: 2px; }
+    .ranking-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: .85rem 1rem; border-radius: 8px; transition: background .15s;
+    }
+    .ranking-row:hover { background: rgba(255,255,255,.04); }
+    .ranking-row.me { background: rgba(46,196,138,.08); border: 1px solid rgba(46,196,138,.15); border-radius: 8px; }
+    .ranking-pos { font-family: "Fraunces", serif; font-size: 18px; color: var(--ink-dim); width: 28px; }
+    .ranking-row.me .ranking-pos { color: var(--accent); }
+    .ranking-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-2); display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; color: var(--ink); flex-shrink: 0;
+    }
+    .ranking-name { font-size: 14px; color: var(--ink); font-weight: 500; flex: 1; }
+    .ranking-row.me .ranking-name::after { content: ' (tu)'; color: var(--accent); font-weight: 400; }
+    .ranking-pts { font-size: 13px; color: var(--ink-dim); }
+    .ranking-pts strong { color: var(--ink); font-weight: 600; }
+
+    /* Sponsor */
+    .sponsor { background: var(--bg-2); padding: 5rem 3rem; border-top: 1px solid var(--line); }
+    .sponsor-card {
+      background: rgba(255,255,255,.03); border: 1px solid var(--line);
+      border-radius: 16px; padding: 2.5rem;
+      display: grid; grid-template-columns: 180px 1fr; gap: 3rem; align-items: center;
+    }
+    .sponsor-logo {
+      background: rgba(255,255,255,.06); border-radius: 12px; padding: 2.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+      border: 1px solid var(--line);
+    }
+    .sponsor-logo-text { font-family: "Inter", sans-serif; font-size: 24px; font-weight: 300; color: var(--ink); letter-spacing: -.01em; }
+    .sponsor-logo-sub { font-size: 9px; letter-spacing: .1em; color: var(--ink-dim); text-transform: uppercase; }
+    .sponsor h3 {
+      font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+      font-size: 26px; color: var(--ink); margin-bottom: .5rem; line-height: 1.2;
+    }
+    .sponsor p { font-size: 14px; color: var(--ink-dim); line-height: 1.7; margin-bottom: 1.75rem; max-width: 480px; }
+    .code-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .code-box {
+      background: rgba(46,196,138,.12); border: 1px solid var(--accent);
+      border-radius: 8px; padding: 11px 20px;
+      font-size: 17px; font-weight: 600; color: #9FE1CB; letter-spacing: .1em;
+    }
+    .code-btn {
+      font-size: 13px; font-weight: 500;
+      background: transparent; color: var(--ink-dim);
+      border: 1px solid var(--line); border-radius: 999px; padding: 11px 18px;
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .code-btn:hover { border-color: rgba(255,255,255,.3); color: var(--ink); }
+    .sponsor-valid { font-size: 12px; color: rgba(255,255,255,.25); margin-top: 1.25rem; }
+
+    /* Gallery */
+    .gallery { background: var(--bg); padding: 0 3rem 5rem; border-top: 1px solid var(--line); }
+    .gallery-hdr {
+      display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; padding-top: 5rem;
+    }
+    .gallery-hdr h3 {
+      font-family: "Fraunces", serif; font-weight: 700; font-size: 30px; color: var(--ink); letter-spacing: -.02em;
+    }
+    .gallery-hdr span { font-size: 13px; color: var(--ink-dim); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 220px 220px;
+      gap: 8px;
+    }
+    .gallery-item { overflow: hidden; border-radius: 10px; position: relative; }
+    .gallery-item:first-child { grid-row: 1 / 3; }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.65) saturate(.75);
+      transition: transform .5s ease, filter .3s;
+    }
+    .gallery-item:hover img { transform: scale(1.05); filter: brightness(.8) saturate(.9); }
+    .gallery-tag {
+      position: absolute; bottom: 10px; left: 12px;
+      font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+      color: rgba(255,255,255,.75); background: rgba(0,0,0,.5);
+      padding: 3px 10px; border-radius: 4px;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(255,255,255,.03); border-top: 1px solid var(--line);
+      padding: 1.5rem 3rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo { font-family: "Fraunces", serif; font-weight: 700; font-size: 16px; color: var(--ink); }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,.3); transition: color .2s; }
+    .footer-links a:hover { color: rgba(255,255,255,.7); }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,.2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .intro { grid-template-columns: 1fr; }
+      .intro-img { min-height: 260px; }
+      .intro-text { padding: 3rem 1.5rem; }
+      .feature { grid-template-columns: 1fr; }
+      .feature-img { display: none; }
+      .feature-text { padding: 3rem 1.5rem; }
+    }
+    @media (max-width: 780px) {
+      .nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero-inner { padding: 0 20px 24px; min-height: 640px; }
+      .hero-slug { left: 20px; top: 24px; font-size: 10px; }
+      .headline { left: 20px; right: 20px; font-size: clamp(78px, 24vw, 160px); }
+      .player { width: 90vw; height: 80%; }
+      .hero-card { left: 20px; right: 20px; width: auto; bottom: 24px; }
+      .hero-chip { display: none; }
+      .strip { padding: 1.25rem 1.5rem; gap: 1.25rem; }
+      .events { padding: 3rem 1.5rem; }
+      .events-grid { grid-template-columns: 1fr; }
+      .ranking { padding: 0 1.5rem 3rem; }
+      .sponsor { padding: 3rem 1.5rem; }
+      .sponsor-card { grid-template-columns: 1fr; gap: 1.5rem; }
+      .gallery { padding: 0 1.5rem 3rem; }
+      .gallery-hdr { padding-top: 3rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px 160px; }
+      .gallery-item:first-child { grid-row: auto; }
+      .footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="nav">
+    <div class="brand"><span class="b">Liga</span><span class="l">Local</span></div>
+    <ul class="nav-links">
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="#">Ranking</a></li>
+      <li><a href="#">Parceiros</a></li>
+      <li><a href="#">Comunidade</a></li>
+    </ul>
+    <div class="premium-badge">★ Premium</div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-slug">
+        <span class="bar"></span>
+        <span>Semana 21 · Aveiro · Maio 2026</span>
+      </div>
+
+      <h1 class="headline">
+        <span class="row r1">JOGA</span>
+        <span class="row r2">FORTE<span class="dot">.</span></span>
+      </h1>
+
+      <div class="ground-shadow"></div>
+
+      <!-- Player sits ABOVE the text (z-index 2) — foot/racket crosses in front of letters -->
+      <div class="player">
+        <img src="assets/img/tennis-player.jpeg" alt="Tenista em ação" />
+      </div>
+
+      <!-- Bottom-left card -->
+      <article class="hero-card">
+        <div class="kicker">Edição Premium</div>
+        <h3>Os eventos certos para o teu perfil de jogador.</h3>
+        <p>Esta semana tens 5 jogos disponíveis perto de ti, escolhidos para o teu nível.</p>
+        <a class="cta" href="eventos.html">
+          Explorar eventos
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+          </svg>
+        </a>
+      </article>
+
+      <!-- Right chip -->
+      <div class="hero-chip">
+        <span class="big">+5</span>
+        <span class="lbl">Jogos perto de ti</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── STATS STRIP ── -->
+  <div class="strip">
+    <div class="strip-stat">
+      <span class="strip-num">300+</span>
+      <span class="strip-label">Jogadores Ativos</span>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-stat">
+      <span class="strip-num">12</span>
+      <span class="strip-label">Eventos esta semana</span>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-stat">
+      <span class="strip-num">5</span>
+      <span class="strip-label">Cidades ativas</span>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-stat">
+      <span class="strip-num">6</span>
+      <span class="strip-label">Modalidades</span>
+    </div>
+  </div>
+
+  <!-- ── INTRO 2-COL ── -->
+  <section class="intro">
+    <div class="intro-text">
+      <div class="section-label">Esta semana na liga</div>
+      <h2>Os jogos certos,<br>na cidade certa.</h2>
+      <p>Selecionámos os eventos que mais se encaixam no teu perfil — futebol e padel em Aveiro este fim de semana. Com o teu plano Premium, tens inscrição prioritária em todos.</p>
+    </div>
+    <div class="intro-img">
+      <img src="assets/img/padel.jpg" alt="Padel Aveiro" />
+    </div>
+  </section>
+
+  <!-- ── FEATURE HEADING ── -->
+  <section class="feature">
+    <div class="feature-text">
+      <div class="section-label">Liga Local</div>
+      <h2 class="feature-heading">OS MELHORES<br>EVENTOS<br>DA TUA CIDADE.</h2>
+      <div class="feature-stat">
+        <span class="feature-stat-num">15+</span>
+        <span class="feature-stat-label">Modalidades<br>& Localidades<br>no distrito</span>
+      </div>
+    </div>
+    <div class="feature-img">
+      <img src="assets/img/basquetebol.jpg" alt="Basquetebol" />
+    </div>
+  </section>
+
+  <!-- ── EVENTS GRID ── -->
+  <section class="events">
+    <div class="section-hdr">
+      <div class="section-label">Para o teu perfil</div>
+      <h2>Eventos desta semana</h2>
+    </div>
+    <div class="events-grid">
+
+      <div class="event-card">
+        <div class="event-sport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c4.41 4.4 10.2 4.4 14.14 0M4.93 19.07c4.41-4.4 10.2-4.4 14.14 0M2 12h20M12 2c-2.76 4.58-2.76 15.42 0 20M12 2c2.76 4.58 2.76 15.42 0 20"/></svg>
+          Futebol 5
+        </div>
+        <div class="event-title">Torneio de Verão — Grupo A</div>
+        <div class="event-meta">
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Sábado, 31 Mai · 10:00
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Campo Municipal, Aveiro
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Casual & Intermédio
+          </div>
+        </div>
+        <div class="event-footer">
+          <span class="event-vagas"><span class="urgente">4 vagas</span> restantes</span>
+          <button class="event-btn">Inscrever</button>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-sport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.4 5.4 18.6 18.6M5.4 18.6 18.6 5.4"/><circle cx="12" cy="12" r="10"/></svg>
+          Padel
+        </div>
+        <div class="event-title">Padel Aberto — Duplas Mistas</div>
+        <div class="event-meta">
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Domingo, 01 Jun · 09:00
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Padel Center Aveiro
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Todos os níveis
+          </div>
+        </div>
+        <div class="event-footer">
+          <span class="event-vagas"><span class="ok">8 vagas</span> disponíveis</span>
+          <button class="event-btn">Inscrever</button>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-sport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c4.41 4.4 10.2 4.4 14.14 0M4.93 19.07c4.41-4.4 10.2-4.4 14.14 0"/></svg>
+          Basquetebol
+        </div>
+        <div class="event-title">Liga 3×3 — Ronda 4</div>
+        <div class="event-meta">
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Sábado, 31 Mai · 15:00
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Pavilhão Infante D. Pedro
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Intermédio
+          </div>
+        </div>
+        <div class="event-footer">
+          <span class="event-vagas"><span class="ok">12 vagas</span> disponíveis</span>
+          <button class="event-btn">Inscrever</button>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-sport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M2 12h20M12 2c-2.76 4.58-2.76 15.42 0 20"/></svg>
+          Voleibol
+        </div>
+        <div class="event-title">Volei de Praia — Abertura de Verão</div>
+        <div class="event-meta">
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Domingo, 01 Jun · 11:00
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Praia da Barra, Ílhavo
+          </div>
+          <div class="event-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Casual
+          </div>
+        </div>
+        <div class="event-footer">
+          <span class="event-vagas"><span class="urgente">2 vagas</span> restantes</span>
+          <button class="event-btn">Inscrever</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── RANKING ── -->
+  <section class="ranking">
+    <div class="ranking-card">
+      <div class="ranking-header">
+        <h3>Ranking de Aveiro — Maio</h3>
+        <span class="ranking-view">
+          Ver completo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </span>
+      </div>
+      <div class="ranking-rows">
+        <div class="ranking-row">
+          <span class="ranking-pos">1</span>
+          <div class="ranking-avatar">MF</div>
+          <span class="ranking-name">Miguel Ferreira</span>
+          <span class="ranking-pts"><strong>847</strong> pts</span>
+        </div>
+        <div class="ranking-row">
+          <span class="ranking-pos">2</span>
+          <div class="ranking-avatar" style="background:#6B7370;">CS</div>
+          <span class="ranking-name">Catarina Santos</span>
+          <span class="ranking-pts"><strong>792</strong> pts</span>
+        </div>
+        <div class="ranking-row me">
+          <span class="ranking-pos">7</span>
+          <div class="ranking-avatar" id="my-avatar">—</div>
+          <span class="ranking-name" id="my-name">Jogador</span>
+          <span class="ranking-pts"><strong>441</strong> pts</span>
+        </div>
+        <div class="ranking-row">
+          <span class="ranking-pos">8</span>
+          <div class="ranking-avatar" style="background:#6B7370;">RP</div>
+          <span class="ranking-name">Rui Pinheiro</span>
+          <span class="ranking-pts"><strong>398</strong> pts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPONSOR ── -->
+  <section class="sponsor">
+    <div class="section-label">Parceiro Exclusivo Premium</div>
+    <div style="height:.75rem"></div>
+    <div class="sponsor-card">
+      <div class="sponsor-logo">
+        <span class="sponsor-logo-text">decathlon</span>
+        <span class="sponsor-logo-sub">Aveiro · Online</span>
+      </div>
+      <div>
+        <h3>10% em todo o equipamento desportivo</h3>
+        <p>Exclusivo para membros Premium da Liga Local. Válido nas lojas Decathlon em Aveiro e Coimbra, e online em decathlon.pt. Apresenta o código no ato de compra ou insere-o no checkout.</p>
+        <div class="code-row">
+          <div class="code-box">LIGALOCAL10</div>
+          <button class="code-btn" id="copyBtn" onclick="copiarCodigo()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar código
+          </button>
+        </div>
+        <p class="sponsor-valid">Válido até 30 de Junho de 2026 · Não acumulável com outras promoções</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section class="gallery">
+    <div class="gallery-hdr">
+      <h3>Liga em imagens</h3>
+      <span>Aveiro · Maio 2026</span>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="assets/img/futebol.jpg" alt="Futebol" />
+        <span class="gallery-tag">Futebol</span>
+      </div>
+      <div class="gallery-item">
+        <img src="assets/img/padel.jpg" alt="Padel" />
+        <span class="gallery-tag">Padel</span>
+      </div>
+      <div class="gallery-item">
+        <img src="assets/img/basquetebol.jpg" alt="Basquetebol" />
+        <span class="gallery-tag">Basquetebol</span>
+      </div>
+      <div class="gallery-item">
+        <img src="assets/img/voleibol.jpg" alt="Voleibol" />
+        <span class="gallery-tag">Voleibol</span>
+      </div>
+      <div class="gallery-item">
+        <img src="assets/img/futebol.jpg" alt="Futsal" style="filter:brightness(.55) saturate(.5) hue-rotate(30deg);" />
+        <span class="gallery-tag">Futsal</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <a href="index.html" class="footer-logo">Liga<span>Local</span></a>
+    <div class="footer-links">
+      <a href="eventos.html">Eventos</a>
+      <a href="privacidade.html">Privacidade</a>
+      <a href="termos.html">Termos</a>
+    </div>
+    <span class="footer-copy">© 2026 Liga Local · Aveiro</span>
+  </footer>
+
+  <script>
+    function copiarCodigo() {
+      navigator.clipboard.writeText('LIGALOCAL10').then(function () {
+        var btn = document.getElementById('copyBtn');
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Copiado!';
+        btn.style.borderColor = 'var(--accent)';
+        btn.style.color = '#9FE1CB';
+        setTimeout(function () {
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar código';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2500);
+      });
+    }
+
+    /* Personalização via URL param ?nome=João */
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var nome = params.get('nome');
+      if (nome) {
+        var initials = nome.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+        var myAvatar = document.getElementById('my-avatar');
+        var myName   = document.getElementById('my-name');
+        if (myAvatar) myAvatar.textContent = initials;
+        if (myName)   myName.textContent   = nome.split(' ')[0];
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -109,6 +109,20 @@
 
           <hr class="field-divider" />
 
+          <!-- Plano escolhido -->
+          <span class="confirm-section-label">Plano</span>
+          <div>
+            <div class="confirm-row">
+              <span class="confirm-row-label">Subscrição</span>
+              <span class="confirm-row-value" id="conf-plano">—</span>
+            </div>
+          </div>
+          <a href="assinatura.html" class="edit-link">
+            <i class="ti ti-edit" style="font-size:12px;"></i> Alterar plano
+          </a>
+
+          <hr class="field-divider" />
+
           <!-- Consentimentos -->
           <span class="confirm-section-label">Consentimentos</span>
           <div>
@@ -225,7 +239,8 @@
       const origem      = state.origem          || '';
       const marketing   = state.marketing !== undefined ? state.marketing : localStorage.getItem('ll_marketing');
       const partners    = state.partners !== undefined ? state.partners : localStorage.getItem('ll_partners');
-      
+      const plano       = localStorage.getItem('ll_plano') || 'free';
+
       const modalStr = JSON.stringify(modalidades);
 
       setVal('conf-nome',            nome);
@@ -256,6 +271,16 @@
 
       setConsent('conf-marketing', marketing);
       setConsent('conf-partners',  partners);
+
+      /* Plano */
+      const planoEl = document.getElementById('conf-plano');
+      if (planoEl) {
+        if (plano === 'premium') {
+          planoEl.innerHTML = '<span style="color:var(--brand);font-weight:500;">Premium</span> <span style="font-size:12px;color:var(--ink-muted);font-weight:300;">— 7 dias grátis, depois 49,20€/mês</span>';
+        } else {
+          planoEl.innerHTML = '<span style="font-weight:500;">Gratuito</span> <span style="font-size:12px;color:var(--ink-muted);font-weight:300;">— sempre grátis</span>';
+        }
+      }
     });
 
     /* ── Confirmar e enviar email ── */
@@ -275,6 +300,8 @@
       const email     = state.email            || '';
       const modalidades = state.modalidades    || [];
       const modalTxt  = modalidades.map(m => modalidadeLabels[m] || m).join(', ');
+      const plano     = localStorage.getItem('ll_plano') || 'free';
+      const planoTxt  = plano === 'premium' ? 'Premium (7 dias grátis, depois 49,20€/mês)' : 'Gratuito';
 
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_name:         nome        || 'Jogador',
@@ -284,6 +311,7 @@
         nivel:           nivelLabels[state.nivel]            || 'Não indicado',
         disponibilidade: dispLabels[state.disponibilidade]   || 'Não indicado',
         frequencia:      freqLabels[state.frequencia]        || 'Não indicado',
+        plano:           planoTxt,
       }).then(() => {
         window.location.href = 'sucesso.html';
       }).catch(() => {

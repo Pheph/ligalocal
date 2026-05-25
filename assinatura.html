@@ -192,9 +192,9 @@
               <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Descontos em parceiros</span></div>
               <div class="feat-row no"><i class="ti ti-x" aria-hidden="true"></i><span>Vagas garantidas em torneios</span></div>
             </div>
-            <a href="etapa1.html" class="btn-plan btn-free">
+            <button class="btn-plan btn-free" onclick="choosePlan('free')">
               Começar grátis
-            </a>
+            </button>
           </div>
 
           <!-- PREMIUM -->
@@ -215,7 +215,7 @@
               <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Descontos em parceiros</span></div>
               <div class="feat-row yes"><i class="ti ti-check" aria-hidden="true"></i><span>Vagas garantidas em torneios</span></div>
             </div>
-            <button class="btn-plan btn-premium" onclick="window.location.href='etapa1.html'">
+            <button class="btn-plan btn-premium" onclick="choosePlan('premium')">
               Experimentar 7 dias grátis
             </button>
             <p class="plan-note">Cancelas quando quiseres. Sem compromisso.</p>
@@ -267,7 +267,7 @@
       <div class="container">
         <h2>Experimenta sem risco.</h2>
         <p>7 dias grátis. Cancelas quando quiseres.</p>
-        <a href="etapa1.html" class="btn btn-white">Começar agora</a>
+        <button class="btn btn-white" onclick="choosePlan('premium')">Começar agora</button>
       </div>
     </section>  
 
@@ -293,6 +293,11 @@
 
   <script src="js/main.js"></script>
   <script>
+    function choosePlan(plan) {
+      localStorage.setItem('ll_plano', plan);
+      window.location.href = 'etapa1.html';
+    }
+
     function toggleFaq(el) {
       var q = el.querySelector('.faq-q');
       var a = el.querySelector('.faq-a');

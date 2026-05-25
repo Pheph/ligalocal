@@ -197,7 +197,11 @@
       </div>
 
       <div class="sucesso-actions" id="actions">
-        <button class="btn-share" onclick="partilhar()">
+        <a href="#" id="btn-newsletter" class="btn-share">
+          <i class="ti ti-mail" aria-hidden="true"></i>
+          Ver a minha newsletter
+        </a>
+        <button class="btn-share" onclick="partilhar()" style="background:transparent;border:1px solid rgba(28,31,30,0.15);color:var(--ink-muted);">
           <i class="ti ti-share" aria-hidden="true"></i>
           Desafiar um amigo
         </button>
@@ -240,6 +244,7 @@
       var local    = state.localidade                     || localStorage.getItem('ll_local') || '';
       var modalStr = JSON.stringify(state.modalidades     || []);
       var nivel    = state.nivel                          || '';
+      var plano    = localStorage.getItem('ll_plano')    || 'free';
 
       localStorage.clear();
 
@@ -276,6 +281,29 @@
       /* Nível */
       var levelEl = document.getElementById('card-level');
       if (levelEl) levelEl.textContent = nivelLabels[nivel] || 'Jogador';
+
+      /* Badge do plano */
+      var badgeEl = document.querySelector('.card-badge');
+      if (badgeEl) {
+        if (plano === 'premium') {
+          badgeEl.textContent = 'Premium';
+          badgeEl.style.background = 'rgba(74,140,127,0.25)';
+          badgeEl.style.color = '#9FE1CB';
+        } else {
+          badgeEl.textContent = 'Membro Free';
+        }
+      }
+
+      /* Link para newsletter correta */
+      var nlBtn = document.getElementById('btn-newsletter');
+      if (nlBtn) {
+        var nomeParam = nome ? '?nome=' + encodeURIComponent(nome) : '';
+        if (plano === 'premium') {
+          nlBtn.href = 'newsletter-premium.html' + nomeParam;
+        } else {
+          nlBtn.href = 'newsletter-free.html' + nomeParam;
+        }
+      }
     })();
 
     /* --- Confetti --- */
