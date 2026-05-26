@@ -182,10 +182,17 @@
     const generoLabels = { m: 'Masculino', f: 'Feminino', outro: 'Outro' };
     const modalidadeLabels = {
       futebol: 'Futebol', basquetebol: 'Basquetebol', futsal: 'Futsal',
-      padel: 'Padel', voleibol: 'Voleibol', outra: 'Outra'
+      padel: 'Padel', voleibol: 'Voleibol', outra: 'Outra',
+      natacao: 'Natação', tenis: 'Ténis', badminton: 'Badminton',
+      atletismo: 'Atletismo', ciclismo: 'Ciclismo', andebol: 'Andebol',
+      crossfit: 'CrossFit', 'artes-marciais': 'Artes Marciais'
     };
     const nivelLabels = { casual: 'Casual', intermedio: 'Intermédio', competitivo: 'Competitivo' };
-    const dispLabels  = { semana: 'Semana', fds: 'Fim de semana', ambos: 'Ambos' };
+    const dispLabels  = {
+      'pos-laboral': 'Pós laboral', fds: 'Fim de semana',
+      manha: 'Manhã', tarde: 'Tarde', noite: 'Noite',
+      semana: 'Semana', ambos: 'Ambos' /* compatibilidade retroativa */
+    };
     const freqLabels  = { semanal: 'Semanal', quinzenal: 'Quinzenal', mensal: 'Mensal' };
     const origemLabels = {
       instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok',
@@ -234,7 +241,8 @@
       const genero      = state.genero          || '';
       const modalidades = state.modalidades     || [];
       const nivel       = state.nivel           || '';
-      const disp        = state.disponibilidade || '';
+      const dispRaw     = state.disponibilidade || [];
+      const dispArr     = Array.isArray(dispRaw) ? dispRaw : [dispRaw].filter(Boolean);
       const freq        = state.frequencia      || '';
       const origem      = state.origem          || '';
       const marketing   = state.marketing !== undefined ? state.marketing : localStorage.getItem('ll_marketing');
@@ -249,7 +257,7 @@
       setVal('conf-ano',             ano);
       setVal('conf-genero',          generoLabels[genero]);
       setVal('conf-nivel',           nivelLabels[nivel]);
-      setVal('conf-disponibilidade', dispLabels[disp]);
+      setVal('conf-disponibilidade', dispArr.length ? dispArr.map(d => dispLabels[d] || d).join(', ') : null);
       setVal('conf-frequencia',      freqLabels[freq]);
       setVal('conf-origem',          origemLabels[origem]);
 
@@ -309,7 +317,7 @@
         local:           localLabels[state.localidade]       || 'Não indicado',
         modalidades:     modalTxt                            || 'Não indicado',
         nivel:           nivelLabels[state.nivel]            || 'Não indicado',
-        disponibilidade: dispLabels[state.disponibilidade]   || 'Não indicado',
+        disponibilidade: (() => { const d = state.disponibilidade || []; const arr = Array.isArray(d) ? d : [d].filter(Boolean); return arr.map(x => dispLabels[x] || x).join(', ') || 'Não indicado'; })(),
         frequencia:      freqLabels[state.frequencia]        || 'Não indicado',
         plano:           planoTxt,
       }).then(() => {

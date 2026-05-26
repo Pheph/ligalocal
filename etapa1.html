@@ -76,6 +76,23 @@
             <p class="error-msg" id="err-local">Seleciona a tua localização.</p>
           </div>
 
+          <!-- Onde ouviste -->
+          <div class="field">
+            <label class="label" for="origem">Onde ouviste falar de nós? <span class="label-optional">— opcional</span></label>
+            <select id="origem">
+              <option value="" disabled selected>Seleciona uma opção</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="tiktok">TikTok</option>
+              <option value="amigo">Um amigo indicou</option>
+              <option value="escola">Escola / Universidade</option>
+              <option value="ginasio">Ginásio / Campo desportivo</option>
+              <option value="google">Pesquisa no Google</option>
+              <option value="evento">Num evento</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
           <hr class="field-divider" />
           <span class="divider-label">Consentimentos</span>
 
@@ -168,10 +185,12 @@
       if (!rcDone) { alert('Confirma que não és um robô antes de continuar.'); return; }
 
       const nome      = document.getElementById('nome').value.trim();
+      const origem    = document.getElementById('origem').value || '';
       const stateData = {
         nome: nome,
         email: email,
         localidade: local,
+        origem: origem,
         marketing: document.getElementById('marketing').checked,
         partners: document.getElementById('partners').checked
       };

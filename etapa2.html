@@ -73,13 +73,31 @@
               <span class="label-sub">— escolhe todas as que jogas</span>
             </label>
             <div class="chips" id="chips-modalidades">
-              <div class="chip" data-val="futebol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-football"></i> Futebol</div>
-              <div class="chip" data-val="basquetebol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-basketball"></i> Basquetebol</div>
-              <div class="chip" data-val="futsal" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-football"></i> Futsal</div>
-              <div class="chip" data-val="padel" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-tennis"></i> Padel</div>
-              <div class="chip" data-val="voleibol" onclick="toggleChip(this,'modalidades')"><i class="ti ti-ball-volleyball"></i> Voleibol</div>
-              <div class="chip" data-val="outra" onclick="toggleChip(this,'modalidades')"><i class="ti ti-plus"></i> Outra</div>
+              <div class="chip" data-val="futebol" onclick="onModalidadeToggle(this)"><i class="ti ti-ball-football"></i> Futebol</div>
+              <div class="chip" data-val="basquetebol" onclick="onModalidadeToggle(this)"><i class="ti ti-ball-basketball"></i> Basquetebol</div>
+              <div class="chip" data-val="futsal" onclick="onModalidadeToggle(this)"><i class="ti ti-ball-football"></i> Futsal</div>
+              <div class="chip" data-val="padel" onclick="onModalidadeToggle(this)"><i class="ti ti-ball-tennis"></i> Padel</div>
+              <div class="chip" data-val="voleibol" onclick="onModalidadeToggle(this)"><i class="ti ti-ball-volleyball"></i> Voleibol</div>
+              <div class="chip" data-val="outra" onclick="onOutraToggle(this)"><i class="ti ti-dots"></i> Outra</div>
             </div>
+
+            <!-- Painel extra — aparece ao clicar "Outra" -->
+            <div id="extras-panel" style="overflow:hidden;max-height:0;opacity:0;transition:max-height 0.35s ease,opacity 0.25s ease;">
+              <div style="margin-top:10px;">
+                <span style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:8px;">Mais modalidades</span>
+                <div class="chips">
+                  <div class="chip" data-val="natacao"        onclick="onModalidadeToggle(this)"><i class="ti ti-ripple"></i> Natação</div>
+                  <div class="chip" data-val="tenis"          onclick="onModalidadeToggle(this)"><i class="ti ti-ball-tennis"></i> Ténis</div>
+                  <div class="chip" data-val="badminton"      onclick="onModalidadeToggle(this)"><i class="ti ti-feather"></i> Badminton</div>
+                  <div class="chip" data-val="atletismo"      onclick="onModalidadeToggle(this)"><i class="ti ti-run"></i> Atletismo</div>
+                  <div class="chip" data-val="ciclismo"       onclick="onModalidadeToggle(this)"><i class="ti ti-bike"></i> Ciclismo</div>
+                  <div class="chip" data-val="andebol"        onclick="onModalidadeToggle(this)"><i class="ti ti-ball"></i> Andebol</div>
+                  <div class="chip" data-val="crossfit"       onclick="onModalidadeToggle(this)"><i class="ti ti-barbell"></i> CrossFit</div>
+                  <div class="chip" data-val="artes-marciais" onclick="onModalidadeToggle(this)"><i class="ti ti-shield"></i> Artes Marciais</div>
+                </div>
+              </div>
+            </div>
+
             <p class="error-msg" id="err-modalidades">Seleciona pelo menos uma modalidade.</p>
           </div>
 
@@ -108,20 +126,16 @@
           <!-- 4. Disponibilidade -->
           <div class="field">
             <label class="label">Disponibilidade <span class="label-optional">— opcional</span></label>
-            <div class="select-grid-3">
-              <div class="sel-card" data-val="semana" onclick="selectSingle(this,'disponibilidade')">
-                <div class="sel-card-icon"><i class="ti ti-briefcase"></i></div>
-                <div class="sel-card-name">Semana</div>
-              </div>
-              <div class="sel-card" data-val="fds" onclick="selectSingle(this,'disponibilidade')">
-                <div class="sel-card-icon"><i class="ti ti-sun"></i></div>
-                <div class="sel-card-name">Fim de semana</div>
-              </div>
-              <div class="sel-card" data-val="ambos" onclick="selectSingle(this,'disponibilidade')">
-                <div class="sel-card-icon"><i class="ti ti-calendar"></i></div>
-                <div class="sel-card-name">Ambos</div>
-              </div>
+            <div class="chips" id="chips-disponibilidade">
+              <div class="chip" data-val="pos-laboral" onclick="toggleChip(this,'disponibilidade')"><i class="ti ti-briefcase"></i> Pós laboral</div>
+              <div class="chip" data-val="fds" onclick="toggleChip(this,'disponibilidade')"><i class="ti ti-sun"></i> Fim de semana</div>
+              <div class="chip disp-extra" data-val="manha" onclick="toggleChip(this,'disponibilidade')" style="display:none;"><i class="ti ti-sunrise"></i> Manhã</div>
+              <div class="chip disp-extra" data-val="tarde" onclick="toggleChip(this,'disponibilidade')" style="display:none;"><i class="ti ti-sun-high"></i> Tarde</div>
+              <div class="chip disp-extra" data-val="noite" onclick="toggleChip(this,'disponibilidade')" style="display:none;"><i class="ti ti-moon"></i> Noite</div>
             </div>
+            <p id="disp-hint" style="display:none;font-size:12px;color:var(--brand-dark);margin-top:6px;font-weight:300;">
+              <i class="ti ti-info-circle" style="font-size:12px;"></i> Com vários desportos podes escolher mais horários.
+            </p>
           </div>
 
           <!-- 5. Frequência -->
@@ -146,23 +160,6 @@
             </div>
           </div>
 
-          <!-- 6. Onde ouviste -->
-          <div class="field">
-            <label class="label" for="origem">Onde ouviste falar de nós? <span class="label-optional">— opcional</span></label>
-            <select id="origem">
-              <option value="" disabled selected>Seleciona uma opção</option>
-              <option value="instagram">Instagram</option>
-              <option value="facebook">Facebook</option>
-              <option value="tiktok">TikTok</option>
-              <option value="amigo">Um amigo indicou</option>
-              <option value="escola">Escola / Universidade</option>
-              <option value="ginasio">Ginásio / Campo desportivo</option>
-              <option value="google">Pesquisa no Google</option>
-              <option value="evento">Num evento</option>
-              <option value="outro">Outro</option>
-            </select>
-          </div>
-
           <hr class="field-divider" style="margin-top:0.5rem;" />
 
           <!-- Submit -->
@@ -183,9 +180,61 @@
   <script>
     /* Preencher anos */
     const sel = document.getElementById('ano-nasc');
-    for (let y = 2016; y >= 1956; y--) {
+    for (let y = 2007; y >= 1960; y--) {
       const o = document.createElement('option');
       o.value = y; o.textContent = y; sel.appendChild(o);
+    }
+
+    /* Mostrar/esconder opções extra de disponibilidade quando 2+ desportos */
+    function updateDispExtras() {
+      const count  = (window._state?.modalidades || []).length;
+      const extras = document.querySelectorAll('.disp-extra');
+      const hint   = document.getElementById('disp-hint');
+      const show   = count >= 2;
+      extras.forEach(el => {
+        el.style.display = show ? 'inline-flex' : 'none';
+        // se ocultar, desselecionar e remover do estado
+        if (!show && el.classList.contains('selected')) {
+          el.classList.remove('selected');
+          const val = el.dataset.val;
+          if (window._state?.disponibilidade) {
+            window._state.disponibilidade = window._state.disponibilidade.filter(v => v !== val);
+          }
+        }
+      });
+      if (hint) hint.style.display = show ? 'block' : 'none';
+    }
+
+    function onModalidadeToggle(el) {
+      toggleChip(el, 'modalidades');
+      updateDispExtras();
+    }
+
+    function onOutraToggle(el) {
+      toggleChip(el, 'modalidades');
+      updateDispExtras();
+
+      const panel  = document.getElementById('extras-panel');
+      const isOpen = el.classList.contains('selected');
+
+      if (isOpen) {
+        panel.style.maxHeight = '400px';
+        panel.style.opacity   = '1';
+      } else {
+        panel.style.maxHeight = '0';
+        panel.style.opacity   = '0';
+        // desselecionar e remover extras do estado ao fechar
+        panel.querySelectorAll('.chip').forEach(chip => {
+          if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            const val = chip.dataset.val;
+            if (window._state?.modalidades) {
+              window._state.modalidades = window._state.modalidades.filter(v => v !== val);
+            }
+          }
+        });
+        updateDispExtras();
+      }
     }
 
     function handleSubmit() {
@@ -207,7 +256,6 @@
 
       // Salvar dados
       window._state.ano = document.getElementById('ano-nasc').value;
-      window._state.origem = document.getElementById('origem').value || '';
 
       // Guardar em localStorage para persistência
       localStorage.setItem('ll_state', JSON.stringify(window._state));
