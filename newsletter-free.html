@@ -251,79 +251,7 @@
     .nl-upgrade-btn:hover { background: var(--ink); }
 
     /* ── PLANS ── */
-    .nl-plans { background: var(--brand-dark); padding: 5rem 3rem; }
-    .nl-plans-label {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(255,255,255,0.4); margin-bottom: 0.75rem;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .nl-plans-label::before { content: ''; width: 28px; height: 1px; background: rgba(255,255,255,0.25); }
-    .nl-plans h2 {
-      font-family: var(--serif); font-size: clamp(38px, 6vw, 60px);
-      color: var(--white); letter-spacing: -0.03em; line-height: 0.95;
-      margin-bottom: 0.75rem;
-    }
-    .nl-plans-sub { font-size: 15px; color: rgba(255,255,255,0.45); font-weight: 300; margin-bottom: 2.5rem; }
-    .nl-plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .nl-plan {
-      border-radius: 16px; padding: 2.25rem;
-      display: flex; flex-direction: column; gap: 1.25rem;
-    }
-    .nl-plan.free {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    }
-    .nl-plan.premium {
-      background: var(--white); border: none;
-    }
-    .nl-plan-tag {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;
-      width: fit-content;
-    }
-    .nl-plan-tag.current { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); }
-    .nl-plan-tag.best { background: var(--brand-light); color: var(--brand-dark); }
-    .nl-plan-price-row { display: flex; align-items: flex-end; gap: 6px; }
-    .nl-plan-price {
-      font-family: var(--serif); font-size: 52px; line-height: 1; color: var(--white);
-    }
-    .nl-plan.premium .nl-plan-price { color: var(--ink); }
-    .nl-plan-period {
-      font-size: 14px; color: rgba(255,255,255,0.35); font-weight: 300; padding-bottom: 8px;
-    }
-    .nl-plan.premium .nl-plan-period { color: var(--ink-muted); }
-    .nl-plan-name {
-      font-family: var(--serif); font-size: 24px; color: var(--white);
-    }
-    .nl-plan.premium .nl-plan-name { color: var(--ink); }
-    .nl-plan-desc {
-      font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; line-height: 1.65;
-    }
-    .nl-plan.premium .nl-plan-desc { color: var(--ink-muted); }
-    .nl-plan-items { display: flex; flex-direction: column; gap: 11px; flex: 1; }
-    .nl-plan-item {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.55);
-    }
-    .nl-plan.premium .nl-plan-item { color: var(--ink-muted); }
-    .nl-plan-item i { font-size: 16px; flex-shrink: 0; }
-    .nl-plan.free .nl-plan-item i { color: rgba(255,255,255,0.25); }
-    .nl-plan.premium .nl-plan-item i { color: var(--brand); }
-    .nl-plan-item.locked { opacity: 0.4; }
-    .nl-plan-item.locked i { color: rgba(255,255,255,0.15) !important; }
-    .nl-plan-btn {
-      font-family: var(--sans); font-size: 14px; font-weight: 500;
-      padding: 13px; border-radius: 8px; border: none; cursor: pointer;
-      width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: all 0.2s;
-    }
-    .nl-plan-btn.current-btn {
-      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4);
-      border: 1px solid rgba(255,255,255,0.1); cursor: default;
-    }
-    .nl-plan-btn.upgrade-btn {
-      background: var(--brand-dark); color: var(--white);
-    }
-    .nl-plan-btn.upgrade-btn:hover { background: var(--ink); }
+    /* nl-plans removido — comparação de preços não mostrada na newsletter free */
 
     /* ── WHAT MAKES US SPECIAL ── */
     .nl-special { background: var(--surface); padding: 5rem 3rem; }
@@ -436,8 +364,6 @@
       .nl-how { padding: 3.5rem 1.5rem; }
       .nl-events { padding: 3.5rem 1.5rem; }
       .nl-events-grid, .nl-events-locked { grid-template-columns: 1fr; }
-      .nl-plans { padding: 3.5rem 1.5rem; }
-      .nl-plans-grid { grid-template-columns: 1fr; }
       .nl-special { padding: 3.5rem 1.5rem; }
       .nl-special-grid { grid-template-columns: 1fr 1fr; }
       .nl-poll { padding: 0 1.5rem 3.5rem; }
@@ -619,61 +545,6 @@
         <i class="ti ti-crown" style="font-size:15px;"></i>
         Ver plano Premium
       </button>
-    </div>
-  </section>
-
-  <!-- ── ESCOLHE O TEU PLANO ── -->
-  <section class="nl-plans">
-    <div class="nl-plans-label">Planos</div>
-    <h2>ESCOLHE O<br>QUE TE FIT.</h2>
-    <p class="nl-plans-sub">Começa grátis, faz upgrade quando quiseres.</p>
-    <div class="nl-plans-grid">
-
-      <div class="nl-plan free">
-        <div class="nl-plan-tag current">Plano atual</div>
-        <div class="nl-plan-price-row">
-          <span class="nl-plan-price">€0</span>
-          <span class="nl-plan-period">/mês</span>
-        </div>
-        <span class="nl-plan-name">Free</span>
-        <p class="nl-plan-desc">Para quem quer experimentar a liga e jogar de vez em quando.</p>
-        <div class="nl-plan-items">
-          <div class="nl-plan-item"><i class="ti ti-check"></i> 2 eventos por semana</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Acesso ao perfil de jogador</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Newsletter semanal</div>
-          <div class="nl-plan-item locked"><i class="ti ti-x"></i> Eventos exclusivos</div>
-          <div class="nl-plan-item locked"><i class="ti ti-x"></i> Descontos de parceiros</div>
-          <div class="nl-plan-item locked"><i class="ti ti-x"></i> Ranking completo</div>
-          <div class="nl-plan-item locked"><i class="ti ti-x"></i> Inscrição prioritária</div>
-        </div>
-        <button class="nl-plan-btn current-btn">Plano atual</button>
-      </div>
-
-      <div class="nl-plan premium">
-        <div class="nl-plan-tag best">
-          <i class="ti ti-crown" style="font-size:11px;"></i> Recomendado
-        </div>
-        <div class="nl-plan-price-row">
-          <span class="nl-plan-price">€4</span>
-          <span class="nl-plan-period">/mês</span>
-        </div>
-        <span class="nl-plan-name">Premium</span>
-        <p class="nl-plan-desc">Para o jogador ativo que quer tirar o máximo da liga.</p>
-        <div class="nl-plan-items">
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Todos os eventos sem limite</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Eventos exclusivos membros</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Descontos Decathlon & parceiros</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Ranking completo da cidade</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Inscrição prioritária</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Histórico de jogos</div>
-          <div class="nl-plan-item"><i class="ti ti-check"></i> Suporte prioritário</div>
-        </div>
-        <button class="nl-plan-btn upgrade-btn" onclick="window.location.href='assinatura.html'">
-          <i class="ti ti-crown" style="font-size:15px;"></i>
-          Fazer upgrade
-        </button>
-      </div>
-
     </div>
   </section>
 
