@@ -356,28 +356,58 @@
     .nl-poll { background: var(--white); padding: 0 3rem 5rem; }
     .nl-poll-card {
       background: var(--surface); border: 1px solid rgba(28,31,30,0.1);
-      border-radius: 14px; padding: 2rem;
+      border-radius: 14px; overflow: hidden;
     }
+    .poll-accent-bar { height: 4px; background: linear-gradient(90deg, var(--brand), var(--brand-dark)); }
+    .poll-body { padding: 2rem; }
+    .poll-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .poll-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--brand-dark); background: var(--brand-light); padding: 4px 12px; border-radius: 20px;
+    }
+    .poll-badge i { font-size: 13px; }
+    .poll-total { font-size: 12px; color: var(--ink-muted); font-weight: 300; }
     .nl-poll-card h3 {
-      font-family: var(--serif); font-size: 22px; color: var(--ink);
-      margin-bottom: 0.4rem;
+      font-family: var(--serif); font-size: 20px; color: var(--ink);
+      margin-bottom: 1.25rem; line-height: 1.3;
     }
-    .nl-poll-card > p { font-size: 14px; color: var(--ink-muted); font-weight: 300; margin-bottom: 1.5rem; }
-    .nl-poll-options { display: flex; flex-direction: column; gap: 10px; }
+    .nl-poll-options { display: flex; flex-direction: column; gap: 8px; }
     .nl-poll-opt {
-      display: flex; align-items: center; gap: 12px;
-      border: 1.5px solid rgba(28,31,30,0.12); border-radius: 10px; padding: 0.9rem 1rem;
-      cursor: pointer; transition: all 0.2s; background: var(--white);
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      border: 1.5px solid rgba(28,31,30,0.12); border-radius: 10px; padding: 0.85rem 1rem;
+      cursor: pointer; transition: all 0.18s; background: var(--white);
       font-family: var(--sans); text-align: left;
     }
-    .nl-poll-opt:hover { border-color: var(--brand); background: var(--brand-light); }
-    .nl-poll-opt i { font-size: 20px; color: var(--brand); flex-shrink: 0; }
+    .nl-poll-opt:hover { border-color: var(--brand); background: var(--brand-light); transform: translateX(2px); }
+    .nl-poll-opt i { font-size: 18px; color: var(--brand); flex-shrink: 0; }
     .nl-poll-opt-label { font-size: 14px; color: var(--ink); font-weight: 500; }
-    .nl-poll-note {
-      font-size: 12px; color: var(--ink-muted); font-weight: 300; margin-top: 1rem;
-      display: flex; align-items: center; gap: 6px;
+
+    /* Resultados */
+    .poll-results { display: none; flex-direction: column; gap: 14px; }
+    .poll-result-row { display: flex; flex-direction: column; gap: 6px; }
+    .poll-result-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .poll-result-label { font-size: 13px; font-weight: 400; color: var(--ink-muted); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .poll-result-label i { font-size: 15px; color: var(--brand); flex-shrink: 0; }
+    .poll-result-row.voted .poll-result-label { color: var(--ink); font-weight: 500; }
+    .poll-result-pct { font-size: 14px; font-weight: 700; color: var(--ink); flex-shrink: 0; }
+    .poll-result-row.voted .poll-result-pct { color: var(--brand-dark); }
+    .poll-my-vote {
+      font-size: 10px; font-weight: 600; color: var(--brand-dark);
+      background: var(--brand-light); padding: 2px 8px; border-radius: 20px;
+      display: inline-flex; align-items: center; gap: 3px; letter-spacing: .02em;
     }
-    .nl-poll-note i { font-size: 14px; color: var(--brand); }
+    .poll-bar-track { background: rgba(28,31,30,0.07); border-radius: 4px; height: 8px; overflow: hidden; }
+    .poll-bar {
+      height: 100%; background: var(--brand); border-radius: 4px;
+      transition: width 0.75s cubic-bezier(0.25,1,0.5,1); width: 0%;
+    }
+    .poll-result-row.voted .poll-bar { background: var(--brand-dark); }
+    .poll-note {
+      font-size: 12px; color: var(--ink-muted); font-weight: 300; margin-top: 1.25rem;
+      display: flex; align-items: flex-start; gap: 6px; line-height: 1.55;
+    }
+    .poll-note i { font-size: 14px; color: var(--brand); flex-shrink: 0; margin-top: 1px; }
 
     /* ── FOOTER ── */
     .nl-footer {
@@ -683,30 +713,43 @@
   <!-- ── POLL INTERATIVO ── -->
   <section class="nl-poll">
     <div class="nl-poll-card">
-      <h3>Poll da semana</h3>
-      <p>Que modalidade queres ver mais em Aveiro este verão?</p>
-      <div class="nl-poll-options">
-        <button class="nl-poll-opt" onclick="votar(this)">
-          <i class="ti ti-ball-football"></i>
-          <span class="nl-poll-opt-label">Futebol de praia</span>
-        </button>
-        <button class="nl-poll-opt" onclick="votar(this)">
-          <i class="ti ti-racket"></i>
-          <span class="nl-poll-opt-label">Torneio de Padel</span>
-        </button>
-        <button class="nl-poll-opt" onclick="votar(this)">
-          <i class="ti ti-ball-volleyball"></i>
-          <span class="nl-poll-opt-label">Volei de praia</span>
-        </button>
-        <button class="nl-poll-opt" onclick="votar(this)">
-          <i class="ti ti-run"></i>
-          <span class="nl-poll-opt-label">Corrida noturna na ria</span>
-        </button>
+      <div class="poll-accent-bar"></div>
+      <div class="poll-body">
+        <div class="poll-header">
+          <div class="poll-badge"><i class="ti ti-chart-bar"></i> Poll da semana</div>
+          <span class="poll-total" id="poll-total">247 votos</span>
+        </div>
+        <h3>Que modalidade queres ver mais em Aveiro este verão?</h3>
+
+        <!-- Opções de voto -->
+        <div class="nl-poll-options" id="poll-vote">
+          <button class="nl-poll-opt" onclick="votar(this,'futebol')">
+            <i class="ti ti-ball-football"></i>
+            <span class="nl-poll-opt-label">Futebol de praia</span>
+          </button>
+          <button class="nl-poll-opt" onclick="votar(this,'padel')">
+            <i class="ti ti-racket"></i>
+            <span class="nl-poll-opt-label">Torneio de Padel</span>
+          </button>
+          <button class="nl-poll-opt" onclick="votar(this,'voleibol')">
+            <i class="ti ti-ball-volleyball"></i>
+            <span class="nl-poll-opt-label">Volei de praia</span>
+          </button>
+          <button class="nl-poll-opt" onclick="votar(this,'corrida')">
+            <i class="ti ti-run"></i>
+            <span class="nl-poll-opt-label">Corrida noturna na ria</span>
+          </button>
+        </div>
+
+        <!-- Resultados (aparece após votar) -->
+        <div class="poll-results" id="poll-results"></div>
+
+        <!-- Nota -->
+        <div class="poll-note" id="poll-note">
+          <i class="ti ti-lock"></i>
+          Os resultados completos são visíveis para membros Premium.
+        </div>
       </div>
-      <p class="nl-poll-note">
-        <i class="ti ti-lock"></i>
-        Os resultados completos são visíveis para membros Premium.
-      </p>
     </div>
   </section>
 
@@ -723,16 +766,82 @@
   </footer>
 
   <script>
-    /* Poll interativo */
-    function votar(btn) {
-      var opts = document.querySelectorAll('.nl-poll-opt');
-      opts.forEach(function (o) { o.disabled = true; o.style.opacity = '0.5'; });
-      btn.style.opacity = '1';
-      btn.style.borderColor = 'var(--brand)';
-      btn.style.background = 'var(--brand-light)';
-      var note = document.querySelector('.nl-poll-note');
-      note.innerHTML = '<i class="ti ti-check" style="color:var(--brand);font-size:14px;"></i> Voto registado! Faz upgrade para Premium para ver os resultados.';
+    /* ── Poll interativo ── */
+    var pollData = {
+      futebol:  { label: 'Futebol de praia',       icon: 'ti-ball-football',   votes: 94 },
+      padel:    { label: 'Torneio de Padel',        icon: 'ti-racket',          votes: 72 },
+      voleibol: { label: 'Volei de praia',          icon: 'ti-ball-volleyball', votes: 52 },
+      corrida:  { label: 'Corrida noturna na ria',  icon: 'ti-run',             votes: 29 }
+    };
+    var POLL_BASE = 247;
+
+    function calcPct(votes, total) {
+      return Math.round(votes / total * 100);
     }
+
+    function renderResults(votedKey, total) {
+      var resultsEl = document.getElementById('poll-results');
+      var html = '';
+      Object.keys(pollData).forEach(function (key) {
+        var d   = pollData[key];
+        var pct = calcPct(d.votes, total);
+        var isVoted = key === votedKey;
+        html += '<div class="poll-result-row' + (isVoted ? ' voted' : '') + '">'
+          + '<div class="poll-result-header">'
+          + '<span class="poll-result-label">'
+          + '<i class="ti ' + d.icon + '"></i> ' + d.label
+          + (isVoted ? ' <span class="poll-my-vote"><i class="ti ti-check"></i> O teu voto</span>' : '')
+          + '</span>'
+          + '<span class="poll-result-pct">' + pct + '%</span>'
+          + '</div>'
+          + '<div class="poll-bar-track"><div class="poll-bar" data-pct="' + pct + '"></div></div>'
+          + '</div>';
+      });
+      resultsEl.innerHTML = html;
+      resultsEl.style.display = 'flex';
+
+      /* animar barras */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          resultsEl.querySelectorAll('.poll-bar').forEach(function (bar) {
+            bar.style.width = bar.dataset.pct + '%';
+          });
+        });
+      });
+    }
+
+    function showVoted(key) {
+      var total = POLL_BASE + 1;
+      pollData[key].votes += 1;
+      document.getElementById('poll-vote').style.display = 'none';
+      document.getElementById('poll-total').textContent = total + ' votos';
+      renderResults(key, total);
+      document.getElementById('poll-note').innerHTML =
+        '<i class="ti ti-check-circle"></i> Voto registado! '
+        + '<a href="assinatura.html" style="color:var(--brand);font-weight:500;text-decoration:underline;">Faz upgrade para Premium</a>'
+        + ' para ver o histórico completo de polls.';
+    }
+
+    function votar(btn, key) {
+      if (localStorage.getItem('ll_poll_voted')) return;
+      localStorage.setItem('ll_poll_voted', key);
+      showVoted(key);
+    }
+
+    /* Restaurar estado se já votou */
+    document.addEventListener('DOMContentLoaded', function () {
+      var voted = localStorage.getItem('ll_poll_voted');
+      if (voted && pollData[voted]) {
+        var total = POLL_BASE + 1;
+        pollData[voted].votes += 1;
+        document.getElementById('poll-vote').style.display = 'none';
+        document.getElementById('poll-total').textContent = total + ' votos';
+        renderResults(voted, total);
+        document.getElementById('poll-note').innerHTML =
+          '<i class="ti ti-check-circle"></i> Já votaste esta semana! '
+          + '<a href="assinatura.html" style="color:var(--brand);font-weight:500;text-decoration:underline;">Ver resultados completos →</a>';
+      }
+    });
 
     /* Personalização via URL params */
     (function () {
