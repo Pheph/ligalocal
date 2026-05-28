@@ -29,7 +29,7 @@
 }
 
 /* --- Base --- */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 
 body {
   font-family: var(--sans);
@@ -111,15 +111,15 @@ p { font-size: 15px; color: var(--ink-muted); font-weight: 300; line-height: 1.7
   transition: box-shadow 0.2s;
 }
 .nav--shadow { box-shadow: 0 1px 12px rgba(28,31,30,0.08); }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 3rem; }
-.nav-logo { font-family: var(--serif); font-size: 20px; color: var(--ink); letter-spacing: -0.01em; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 2rem; }
+.nav-logo { font-family: var(--serif); font-size: 20px; color: var(--ink); letter-spacing: -0.01em; white-space: nowrap; }
 .nav-logo span { color: var(--ink); }
-.nav-links { display: flex; align-items: center; gap: 2rem; }
-.nav-link { font-size: 13px; color: var(--ink-muted); background: none; border: none; padding: 0; transition: color 0.2s; }
+.nav-links { display: flex; align-items: center; gap: 1.75rem; }
+.nav-link { font-size: 13px; color: var(--ink-muted); background: none; border: none; padding: 0; transition: color 0.2s; white-space: nowrap; }
 .nav-link:hover { color: var(--ink); }
 .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-muted); background: none; border: none; transition: color 0.2s; }
 .nav-back:hover { color: var(--ink); }
-.nav-cta { font-size: 13px; font-weight: 500; background: var(--brand); color: var(--white); border: none; border-radius: var(--r-md); padding: 8px 18px; transition: background 0.2s; }
+.nav-cta { font-size: 13px; font-weight: 500; background: var(--brand); color: var(--white); border: none; border-radius: var(--r-md); padding: 8px 16px; transition: background 0.2s; white-space: nowrap; }
 .nav-cta:hover { background: var(--brand-dark); }
 
 /* --- Hero --- */

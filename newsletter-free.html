@@ -337,6 +337,70 @@
     }
     .poll-note i { font-size: 14px; color: var(--brand); flex-shrink: 0; margin-top: 1px; }
 
+    /* ── MODAL INSCRIÇÃO ── */
+    .nl-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(28,31,30,0.5);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .nl-overlay.open { opacity: 1; pointer-events: all; }
+    .nl-modal {
+      background: var(--white); border-radius: 16px;
+      width: 100%; max-width: 380px; padding: 1.75rem;
+      position: relative;
+      transform: translateY(14px) scale(0.97);
+      transition: all 0.22s;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .nl-overlay.open .nl-modal { transform: translateY(0) scale(1); }
+    .nl-modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--surface); border: none; border-radius: 50%;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--ink-muted); font-size: 15px;
+    }
+    .nl-modal-close:hover { background: rgba(28,31,30,0.1); }
+    .nl-modal-tag {
+      font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--brand-dark); background: var(--brand-light);
+      padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 0.6rem;
+    }
+    .nl-modal h2 { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 0.25rem; }
+    .nl-modal-sub { font-size: 13px; color: var(--ink-muted); font-weight: 300; margin-bottom: 1.25rem; }
+    .nl-modal-info {
+      background: var(--surface); border-radius: 10px;
+      padding: 0.85rem 1rem; margin-bottom: 1.25rem;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .nl-modal-info-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--ink-muted); font-weight: 300;
+    }
+    .nl-modal-info-row i { font-size: 14px; color: var(--brand); }
+    .nl-modal-field { margin-bottom: 1rem; }
+    .nl-modal-label { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 5px; }
+    .nl-modal-input {
+      width: 100%; border: 1px solid rgba(28,31,30,0.2); border-radius: 8px;
+      padding: 10px 12px; font-family: var(--sans); font-size: 14px; color: var(--ink);
+      background: var(--white); outline: none; transition: border-color 0.15s;
+    }
+    .nl-modal-input:focus { border-color: var(--brand); }
+    .nl-modal-err { font-size: 12px; color: #c0392b; display: none; margin-top: 4px; }
+    .nl-modal-btn {
+      width: 100%; background: var(--brand); color: var(--white);
+      border: none; border-radius: 8px; padding: 12px;
+      font-family: var(--sans); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .nl-modal-btn:hover { background: var(--brand-dark); }
+    .nl-modal-success { text-align: center; padding: 0.75rem 0; }
+    .nl-modal-success i { font-size: 44px; color: var(--brand); display: block; margin-bottom: 0.75rem; }
+    .nl-modal-success h3 { font-family: var(--serif); font-size: 20px; color: var(--ink); margin-bottom: 0.3rem; }
+    .nl-modal-success p { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+
     /* ── FOOTER ── */
     .nl-footer {
       background: var(--ink); padding: 1.5rem 3rem;
@@ -497,7 +561,7 @@
         </div>
         <div class="nl-event-footer">
           <span class="nl-event-vagas"><strong>4 vagas</strong> restantes</span>
-          <button class="nl-event-btn">Inscrever</button>
+          <button class="nl-event-btn" onclick="nlOpenModal('futebol','Torneio de Verão — Grupo A','Sábado, 31 Mai · 10:00','Campo Municipal, Aveiro')">Inscrever</button>
         </div>
       </div>
 
@@ -513,7 +577,7 @@
         </div>
         <div class="nl-event-footer">
           <span class="nl-event-vagas"><strong>6 vagas</strong> restantes</span>
-          <button class="nl-event-btn">Inscrever</button>
+          <button class="nl-event-btn" onclick="nlOpenModal('voleibol','Volei de Praia — Abertura de Verão','Domingo, 01 Jun · 11:00','Praia da Barra, Ílhavo')">Inscrever</button>
         </div>
       </div>
     </div>
@@ -636,7 +700,67 @@
     <span class="nl-footer-copy">© 2026 Liga Local · Aveiro</span>
   </footer>
 
+  <!-- ── MODAL INSCRIÇÃO ── -->
+  <div class="nl-overlay" id="nl-overlay" onclick="nlCloseOverlay(event)">
+    <div class="nl-modal" id="nl-modal">
+      <button class="nl-modal-close" onclick="nlCloseModal()"><i class="ti ti-x"></i></button>
+      <div id="nl-modal-body"></div>
+    </div>
+  </div>
+
   <script>
+    /* ── Modal de inscrição ── */
+    var sportLabels = { futebol: 'Futebol', voleibol: 'Voleibol', padel: 'Padel', basquetebol: 'Basquetebol' };
+
+    function nlOpenModal(sport, titulo, data, local) {
+      document.getElementById('nl-modal-body').innerHTML =
+        '<span class="nl-modal-tag">' + (sportLabels[sport] || sport) + '</span>' +
+        '<h2>' + titulo + '</h2>' +
+        '<p class="nl-modal-sub">Preenche os teus dados para garantir o teu lugar.</p>' +
+        '<div class="nl-modal-info">' +
+          '<div class="nl-modal-info-row"><i class="ti ti-calendar"></i> ' + data + '</div>' +
+          '<div class="nl-modal-info-row"><i class="ti ti-map-pin"></i> ' + local + '</div>' +
+        '</div>' +
+        '<div class="nl-modal-field">' +
+          '<label class="nl-modal-label" for="nl-nome">Nome próprio</label>' +
+          '<input type="text" id="nl-nome" class="nl-modal-input" placeholder="Ex: João Silva" />' +
+        '</div>' +
+        '<div class="nl-modal-field">' +
+          '<label class="nl-modal-label" for="nl-email">Email <span style="color:#c0392b">*</span></label>' +
+          '<input type="email" id="nl-email" class="nl-modal-input" placeholder="o.teu@email.com" />' +
+          '<p class="nl-modal-err" id="nl-err-email">Introduz um email válido.</p>' +
+        '</div>' +
+        '<button class="nl-modal-btn" onclick="nlSubmit()">Confirmar inscrição</button>';
+      document.getElementById('nl-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function nlSubmit() {
+      var email = document.getElementById('nl-email').value.trim();
+      var errEl = document.getElementById('nl-err-email');
+      errEl.style.display = 'none';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.style.display = 'block';
+        document.getElementById('nl-email').style.borderColor = '#c0392b';
+        return;
+      }
+      document.getElementById('nl-modal-body').innerHTML =
+        '<div class="nl-modal-success">' +
+          '<i class="ti ti-circle-check"></i>' +
+          '<h3>Inscrição confirmada!</h3>' +
+          '<p>Vais receber um email de confirmação em breve.<br>Até lá — aquece bem!</p>' +
+        '</div>';
+    }
+
+    function nlCloseModal() {
+      document.getElementById('nl-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function nlCloseOverlay(e) {
+      if (e.target === document.getElementById('nl-overlay')) nlCloseModal();
+    }
+
     /* ── Poll interativo ── */
     var pollData = {
       futebol:  { label: 'Futebol de praia',       icon: 'ti-ball-football',   votes: 94 },

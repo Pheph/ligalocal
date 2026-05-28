@@ -98,6 +98,32 @@
       transition: color 0.15s;
     }
     .sport-suggest-btn:hover { color: var(--brand); }
+
+    /* Parceiros strip */
+    .partners-strip {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 0; margin: 1.5rem 0 1rem;
+      border: 1px solid var(--border); border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+    .partner-item {
+      flex: 1; min-width: 140px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 1.5rem 1rem;
+      background: var(--white);
+      transition: background 0.15s;
+    }
+    .partner-item:hover { background: var(--brand-light); }
+    .partner-item-name {
+      font-family: var(--sans); font-size: 15px; font-weight: 500;
+      color: var(--ink); letter-spacing: -0.01em;
+    }
+    .partner-item-cat {
+      font-size: 11px; color: var(--ink-muted); font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+    .partner-divider { width: 1px; background: var(--border); align-self: stretch; }
+    .partners-cta-line { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
   </style>
 </head>
 <body>
@@ -110,10 +136,9 @@
         <div class="nav-links">
           <a href="#como-funciona" class="nav-link">Como funciona</a>
           <a href="#modalidades" class="nav-link">Modalidades</a>
-          <a href="eventos.html" class="nav-link">Eventos</a>
           <a href="assinatura.html" class="nav-link">Planos</a>
-          <a href="comunidade.html" class="nav-link">Comunidade</a>
-          <a href="assinatura.html" class="nav-cta">Entrar na liga</a>
+          <a href="#parceiros" class="nav-link">Parceiros</a>
+          <a href="etapa1.html" class="nav-cta">Entrar na liga</a>
         </div>
       </nav>
     </div>
@@ -203,6 +228,40 @@
             <div class="step-num">4</div>
             <div class="step-title">Ficas na comunidade</div>
             <p class="step-desc">Eventos, torneios sazonais e novidades exclusivas para quem está na lista.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARCEIROS -->
+    <hr class="section-divider" />
+    <section id="parceiros" class="section">
+      <div class="container">
+        <span class="section-label observe">Parceiros oficiais</span>
+        <div class="partners-strip observe">
+          <div class="partner-item">
+            <span class="partner-item-name">decathlon</span>
+            <span class="partner-item-cat">Equipamento</span>
+          </div>
+          <div class="partner-divider"></div>
+          <div class="partner-item">
+            <span class="partner-item-name">SportZone</span>
+            <span class="partner-item-cat">Equipamento</span>
+          </div>
+          <div class="partner-divider"></div>
+          <div class="partner-item">
+            <span class="partner-item-name">PadelCenter</span>
+            <span class="partner-item-cat">Instalações</span>
+          </div>
+          <div class="partner-divider"></div>
+          <div class="partner-item">
+            <span class="partner-item-name">Holmes Place</span>
+            <span class="partner-item-cat">Ginásio</span>
+          </div>
+          <div class="partner-divider"></div>
+          <div class="partner-item">
+            <span class="partner-item-name">GoNatural</span>
+            <span class="partner-item-cat">Nutrição</span>
           </div>
         </div>
       </div>

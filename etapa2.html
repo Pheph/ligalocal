@@ -263,7 +263,7 @@
       window.location.href = 'confirmacao.html';
     }
 
-    // Carregar estado ao chegar à página
+    // Carregar estado ao chegar à página e restaurar visual
     document.addEventListener('DOMContentLoaded', () => {
       if (!window._state) window._state = {};
       try {
@@ -280,6 +280,60 @@
           };
         }
       } catch (e) {}
+
+      const s = window._state;
+
+      // Ano de nascimento
+      if (s.ano) document.getElementById('ano-nasc').value = s.ano;
+
+      // Género
+      if (s.genero) {
+        const gc = document.querySelector(`#chips-genero [data-val="${s.genero}"]`);
+        if (gc) gc.classList.add('selected');
+      }
+
+      // Modalidades
+      if (s.modalidades?.length) {
+        s.modalidades.forEach(val => {
+          const chip = document.querySelector(`#chips-modalidades [data-val="${val}"]`);
+          if (chip) { chip.classList.add('selected'); return; }
+          // pode estar no painel extra
+          const extra = document.querySelector(`#extras-panel [data-val="${val}"]`);
+          if (extra) extra.classList.add('selected');
+        });
+        // se algum extra está selecionado, abrir painel "Outra"
+        const outraChip = document.querySelector(`#chips-modalidades [data-val="outra"]`);
+        const hasExtra  = s.modalidades.some(v =>
+          ['natacao','tenis','badminton','atletismo','ciclismo','andebol','crossfit','artes-marciais'].includes(v)
+        );
+        if (hasExtra && outraChip) {
+          outraChip.classList.add('selected');
+          const panel = document.getElementById('extras-panel');
+          panel.style.maxHeight = '400px';
+          panel.style.opacity   = '1';
+        }
+        updateDispExtras();
+      }
+
+      // Disponibilidade
+      if (s.disponibilidade?.length) {
+        s.disponibilidade.forEach(val => {
+          const chip = document.querySelector(`#chips-disponibilidade [data-val="${val}"]`);
+          if (chip) chip.classList.add('selected');
+        });
+      }
+
+      // Nível
+      if (s.nivel) {
+        const nc = document.querySelector(`.sel-card[data-val="${s.nivel}"]`);
+        if (nc) nc.classList.add('selected');
+      }
+
+      // Frequência
+      if (s.frequencia) {
+        const fc = document.querySelector(`.sel-card[data-val="${s.frequencia}"]`);
+        if (fc) fc.classList.add('selected');
+      }
     });
   </script>
 </body>

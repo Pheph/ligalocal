@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · Parceiros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-header { padding: 2.5rem 0 0; }
+    .page-header h1 { margin-bottom: 0.3rem; }
+    .page-header p { color: var(--ink-muted); font-weight: 300; margin-bottom: 2rem; }
+
+    .partners-intro {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--brand-light); border-radius: var(--r-md);
+      padding: 0.85rem 1rem; margin-bottom: 2.5rem;
+      font-size: 13px; color: var(--brand-dark); font-weight: 300;
+    }
+    .partners-intro i { font-size: 18px; color: var(--brand); flex-shrink: 0; }
+    .partners-intro strong { font-weight: 500; }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      padding-bottom: 4rem;
+    }
+
+    .partner-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .partner-card:hover {
+      border-color: var(--brand);
+      box-shadow: 0 4px 20px rgba(74,140,127,0.1);
+    }
+
+    .partner-logo-area {
+      height: 100px;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .partner-logo-text {
+      font-family: var(--sans); font-weight: 300; font-size: 26px;
+      color: var(--ink); letter-spacing: -0.02em;
+    }
+    .partner-logo-text b { font-weight: 500; }
+
+    .partner-body { padding: 1.25rem; }
+
+    .partner-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--brand-dark); background: var(--brand-light);
+      padding: 2px 8px; border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+    .partner-badge i { font-size: 12px; }
+
+    .partner-name {
+      font-family: var(--serif); font-size: 18px;
+      color: var(--ink); margin-bottom: 0.4rem;
+    }
+
+    .partner-desc {
+      font-size: 13px; color: var(--ink-muted); font-weight: 300;
+      line-height: 1.6; margin-bottom: 1.1rem;
+    }
+
+    .partner-discount {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border-radius: var(--r-md);
+      padding: 0.75rem 1rem; margin-bottom: 1rem;
+    }
+    .partner-discount-pct {
+      font-family: var(--serif); font-size: 28px;
+      color: var(--brand); line-height: 1; flex-shrink: 0;
+    }
+    .partner-discount-info { display: flex; flex-direction: column; gap: 2px; }
+    .partner-discount-label { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .partner-discount-cond  { font-size: 11px; color: var(--ink-muted); font-weight: 300; }
+
+    .partner-code-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .partner-code {
+      flex: 1; background: rgba(74,140,127,0.08);
+      border: 1px dashed var(--brand);
+      border-radius: var(--r-sm); padding: 7px 12px;
+      font-size: 13px; font-weight: 500; color: var(--brand-dark);
+      letter-spacing: 0.06em; text-align: center;
+    }
+    .partner-copy-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      background: var(--brand); color: var(--white);
+      border: none; border-radius: var(--r-sm);
+      padding: 8px 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 5px;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .partner-copy-btn:hover { background: var(--brand-dark); }
+    .partner-copy-btn i { font-size: 13px; }
+
+    .partner-valid {
+      font-size: 11px; color: var(--ink-muted); font-weight: 300;
+      margin-top: 0.6rem;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .partner-valid i { font-size: 12px; color: var(--brand); }
+
+    .no-code {
+      font-size: 13px; color: var(--ink-muted); font-weight: 300;
+      font-style: italic;
+    }
+
+    .section-divider {
+      font-family: var(--serif); font-size: 20px; color: var(--ink);
+      margin: 0 0 1.25rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .cta-box {
+      background: var(--brand-dark); border-radius: var(--r-lg);
+      padding: 2rem 2.5rem; margin-bottom: 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .cta-box-text h2 {
+      font-family: var(--serif); font-size: 22px; color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .cta-box-text p {
+      font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 300;
+    }
+    .cta-box .btn-cta {
+      font-family: var(--sans); font-size: 14px; font-weight: 500;
+      background: var(--white); color: var(--brand-dark);
+      border: none; border-radius: var(--r-md); padding: 11px 22px;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .cta-box .btn-cta:hover { background: var(--brand-light); }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Início</a>
+          <a href="eventos.html" class="nav-link">Eventos</a>
+          <a href="parceiros.html" class="nav-link" style="color:var(--ink);">Parceiros</a>
+          <a href="comunidade.html" class="nav-link">Comunidade</a>
+          <a href="assinatura.html" class="nav-link">Planos</a>
+          <a href="etapa1.html" class="nav-cta">Entrar na liga</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <div class="page-header">
+        <h1>Parceiros</h1>
+        <p>Descontos e vantagens exclusivas para membros da Liga Local na região de Aveiro.</p>
+      </div>
+
+      <div class="partners-intro">
+        <i class="ti ti-info-circle"></i>
+        <span>Os descontos com <strong>código</strong> são exclusivos para membros. Os restantes basta mostrar o cartão de membro da Liga Local.</span>
+      </div>
+
+      <!-- Desporto & Equipamento -->
+      <div class="section-divider">Desporto &amp; Equipamento</div>
+      <div class="partners-grid">
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text"><b>decathlon</b></span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-tag"></i> Equipamento</span>
+            <div class="partner-name">Decathlon Aveiro</div>
+            <p class="partner-desc">Desconto em todo o equipamento desportivo nas lojas Decathlon de Aveiro e Coimbra, e online.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">10%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Todo o equipamento</span>
+                <span class="partner-discount-cond">Lojas Aveiro · Coimbra · Online</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="partner-code">LIGALOCAL10</span>
+              <button class="partner-copy-btn" onclick="copiarCodigo(this,'LIGALOCAL10')">
+                <i class="ti ti-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido até 31 Dez 2026 · Não acumulável</p>
+          </div>
+        </div>
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text">Sport<b>Zone</b></span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-tag"></i> Equipamento</span>
+            <div class="partner-name">SportZone Aveiro</div>
+            <p class="partner-desc">Desconto em calçado e roupa desportiva nas lojas SportZone do Fórum Aveiro.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">15%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Calçado e roupa</span>
+                <span class="partner-discount-cond">Fórum Aveiro</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="partner-code">LIGA15SZ</span>
+              <button class="partner-copy-btn" onclick="copiarCodigo(this,'LIGA15SZ')">
+                <i class="ti ti-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido até 30 Jun 2026</p>
+          </div>
+        </div>
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text">Padel<b>Center</b></span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-racket"></i> Instalações</span>
+            <div class="partner-name">Padel Center Aveiro</div>
+            <p class="partner-desc">Reserva de campos de padel com desconto. Basta mostrar o cartão de membro Liga Local na recepção.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">20%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Reserva de campos</span>
+                <span class="partner-discount-cond">2ª a 6ª · Fora de horas de ponta</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="no-code">Mostrar cartão de membro</span>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido para membros ativos</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Saúde & Bem-estar -->
+      <div class="section-divider">Saúde &amp; Bem-estar</div>
+      <div class="partners-grid">
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text"><b>Holmes</b> Place</span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-activity"></i> Ginásio</span>
+            <div class="partner-name">Holmes Place Aveiro</div>
+            <p class="partner-desc">Inscrição no ginásio sem taxa de adesão e mensalidade reduzida para todos os membros Liga Local.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">0€</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Taxa de adesão</span>
+                <span class="partner-discount-cond">+ 10% desconto na mensalidade</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="partner-code">LIGALOCAL-HP</span>
+              <button class="partner-copy-btn" onclick="copiarCodigo(this,'LIGALOCAL-HP')">
+                <i class="ti ti-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido para novas inscrições</p>
+          </div>
+        </div>
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text">Nutri<b>Sport</b></span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-salad"></i> Nutrição</span>
+            <div class="partner-name">NutriSport Aveiro</div>
+            <p class="partner-desc">Consulta de nutrição desportiva com desconto e plano alimentar personalizado para desportistas amadores.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">25%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Consulta + plano alimentar</span>
+                <span class="partner-discount-cond">1ª consulta</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="partner-code">LIGA25NS</span>
+              <button class="partner-copy-btn" onclick="copiarCodigo(this,'LIGA25NS')">
+                <i class="ti ti-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido até 31 Ago 2026</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Alimentação -->
+      <div class="section-divider">Alimentação</div>
+      <div class="partners-grid">
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text">Café <b>Beira-Rio</b></span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-coffee"></i> Restauração</span>
+            <div class="partner-name">Café Beira-Rio Aveiro</div>
+            <p class="partner-desc">Menu pré e pós-treino com ingredientes locais. Desconto para membros nos dias de evento Liga Local.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">10%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Menus desportivos</span>
+                <span class="partner-discount-cond">Dias de evento · Cartão de membro</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="no-code">Mostrar cartão de membro</span>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido para membros ativos</p>
+          </div>
+        </div>
+
+        <div class="partner-card">
+          <div class="partner-logo-area">
+            <span class="partner-logo-text"><b>Go</b>Natural</span>
+          </div>
+          <div class="partner-body">
+            <span class="partner-badge"><i class="ti ti-leaf"></i> Suplementação</span>
+            <div class="partner-name">GoNatural Aveiro</div>
+            <p class="partner-desc">Loja de suplementos e produtos naturais. Desconto em proteínas, barras energéticas e bebidas desportivas.</p>
+            <div class="partner-discount">
+              <span class="partner-discount-pct">12%</span>
+              <div class="partner-discount-info">
+                <span class="partner-discount-label">Todo o catálogo</span>
+                <span class="partner-discount-cond">Loja física e online</span>
+              </div>
+            </div>
+            <div class="partner-code-row">
+              <span class="partner-code">LIGALOCAL12</span>
+              <button class="partner-copy-btn" onclick="copiarCodigo(this,'LIGALOCAL12')">
+                <i class="ti ti-copy"></i> Copiar
+              </button>
+            </div>
+            <p class="partner-valid"><i class="ti ti-clock"></i> Válido até 31 Out 2026</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA parceiro -->
+      <div class="cta-box">
+        <div class="cta-box-text">
+          <h2>Queres ser parceiro da Liga Local?</h2>
+          <p>Chega aos jogadores desportivos da região de Aveiro. Contacta-nos para saber mais.</p>
+        </div>
+        <a href="contacto.html" class="btn-cta">Fala connosco</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span class="footer-logo">Liga<span>Local</span></span>
+          <span class="footer-location"> · Aveiro</span>
+        </div>
+        <div class="footer-links">
+          <a href="privacidade.html" class="footer-link">Política de Privacidade</a>
+          <a href="termos.html" class="footer-link">Termos de Serviço</a>
+          <a href="contacto.html" class="footer-link">Contacto</a>
+        </div>
+        <span class="footer-copy">© 2026 Liga Local</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function copiarCodigo(btn, codigo) {
+      navigator.clipboard.writeText(codigo).then(function () {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<i class="ti ti-check"></i> Copiado!';
+        btn.style.background = 'var(--brand-dark)';
+        setTimeout(function () {
+          btn.innerHTML = original;
+          btn.style.background = '';
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
