@@ -224,8 +224,8 @@
     }
     .intro-cta:hover { gap: 12px; }
     .intro-cta svg { width: 16px; height: 16px; }
-    .intro-img { overflow: hidden; min-height: 420px; }
-    .intro-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.65) saturate(.75); }
+    .intro-img { overflow: hidden; min-height: 420px; position: relative; }
+    .intro-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; filter: brightness(.8) saturate(.75); }
 
     /* Feature heading */
     .feature {
@@ -247,8 +247,8 @@
     }
     .feature-stat-num { font-family: "Fraunces", serif; font-size: 52px; color: var(--accent); line-height: 1; }
     .feature-stat-label { font-size: 13px; color: var(--ink-dim); line-height: 1.55; }
-    .feature-img { overflow: hidden; }
-    .feature-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.55) saturate(.75); }
+    .feature-img { overflow: hidden; position: relative; }
+    .feature-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.6) saturate(.75); }
 
     /* Events */
     .events { background: var(--bg); padding: 5rem 3rem; border-top: 1px solid var(--line); }
