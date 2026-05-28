@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liga Local · O meu perfil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+
+    .profile-hero {
+      background: var(--brand-dark); padding: 3rem 0 0;
+    }
+    .profile-hero-inner {
+      display: flex; align-items: flex-end; gap: 2.5rem;
+      padding-bottom: 0; flex-wrap: wrap;
+    }
+
+    .profile-avatar {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 32px; color: #fff;
+      border: 3px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    .profile-hero-info { flex: 1; padding-bottom: 1.75rem; }
+    .profile-hero-name {
+      font-family: var(--serif); font-size: clamp(26px, 4vw, 36px);
+      color: #fff; letter-spacing: -0.02em; margin-bottom: 0.3rem;
+    }
+    .profile-hero-meta {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 300;
+    }
+    .profile-hero-meta span { display: flex; align-items: center; gap: 5px; }
+    .profile-hero-meta i { font-size: 14px; }
+
+    .profile-plan-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 1rem;
+    }
+    .profile-plan-badge.free {
+      background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6);
+    }
+    .profile-plan-badge.premium {
+      background: rgba(159,225,203,0.18); color: #9FE1CB;
+    }
+
+    .profile-tabs {
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 1.5rem;
+    }
+    .profile-tab {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      padding: 0.85rem 1.5rem; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      background: none; border-top: none; border-left: none; border-right: none;
+      font-family: var(--sans);
+    }
+    .profile-tab.active { color: #fff; border-bottom-color: #9FE1CB; }
+    .profile-tab:hover { color: rgba(255,255,255,0.8); }
+
+    /* Content */
+    .profile-content { background: var(--surface); min-height: 60vh; }
+    .profile-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 2rem 0;
+    }
+    .profile-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 1.5rem;
+    }
+    .profile-card-title {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--ink-muted);
+      margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
+    }
+    .profile-card-title i { font-size: 15px; color: var(--brand); }
+
+    /* Stats row */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border); border-radius: var(--r-md); overflow: hidden;
+      margin-bottom: 0;
+    }
+    .stat-cell {
+      background: var(--white); padding: 1.25rem 1rem; text-align: center;
+    }
+    .stat-num {
+      font-family: var(--serif); font-size: 30px; color: var(--brand);
+      line-height: 1; margin-bottom: 4px;
+    }
+    .stat-label { font-size: 11px; color: var(--ink-muted); font-weight: 300; }
+
+    /* Dados pessoais */
+    .data-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { color: var(--ink-muted); font-weight: 300; }
+    .data-value { color: var(--ink); font-weight: 500; }
+
+    /* Modalidades chips */
+    .modal-chips-display { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.25rem; }
+    .modal-chip-display {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500; color: var(--brand-dark);
+      background: var(--brand-light); padding: 4px 10px; border-radius: 20px;
+    }
+    .modal-chip-display i { font-size: 13px; }
+
+    /* Eventos recentes */
+    .event-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .event-row:last-child { border-bottom: none; }
+    .event-row-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--brand-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--brand); flex-shrink: 0;
+    }
+    .event-row-info { flex: 1; }
+    .event-row-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .event-row-meta { font-size: 12px; color: var(--ink-muted); font-weight: 300; margin-top: 2px; }
+    .event-row-pts {
+      font-size: 12px; font-weight: 500; color: var(--brand-dark);
+      background: var(--brand-light); padding: 3px 8px; border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* Ranking card */
+    .rank-highlight {
+      background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+      border-radius: var(--r-md); padding: 1.5rem;
+      display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.25rem;
+    }
+    .rank-pos { font-family: var(--serif); font-size: 52px; color: #fff; line-height: 1; }
+    .rank-info { flex: 1; }
+    .rank-info-label { font-size: 11px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .rank-info-pts { font-size: 22px; font-weight: 500; color: #fff; }
+    .rank-info-sub { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 300; margin-top: 2px; }
+    .rank-nearby { display: flex; flex-direction: column; gap: 6px; }
+    .rank-nearby-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0.6rem 0.75rem; border-radius: 8px;
+      font-size: 13px;
+    }
+    .rank-nearby-row.me { background: var(--brand-light); }
+    .rank-nearby-pos { width: 20px; font-weight: 500; color: var(--ink-muted); text-align: right; font-size: 12px; }
+    .rank-nearby-row.me .rank-nearby-pos { color: var(--brand-dark); }
+    .rank-nearby-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 500; color: var(--ink); flex-shrink: 0;
+    }
+    .rank-nearby-row.me .rank-nearby-avatar { background: var(--brand); color: #fff; }
+    .rank-nearby-name { flex: 1; color: var(--ink); }
+    .rank-nearby-row.me .rank-nearby-name { font-weight: 500; color: var(--brand-dark); }
+    .rank-nearby-pts { font-size: 12px; color: var(--ink-muted); }
+
+    /* Member card small */
+    .mini-card {
+      background: var(--brand-dark); border-radius: 12px; padding: 1.25rem;
+      position: relative; overflow: hidden;
+    }
+    .mini-card-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .mini-card-top {
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1; margin-bottom: 1rem;
+    }
+    .mini-card-logo { font-family: var(--serif); font-size: 14px; color: #fff; }
+    .mini-card-badge {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 20px;
+    }
+    .mini-card-name { font-family: var(--serif); font-size: 18px; color: #fff; position: relative; z-index: 1; margin-bottom: 3px; }
+    .mini-card-loc { font-size: 11px; color: rgba(255,255,255,0.4); position: relative; z-index: 1; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 4px; }
+    .mini-card-num { font-size: 11px; color: rgba(255,255,255,0.3); position: relative; z-index: 1; }
+    .mini-card-num strong { color: rgba(255,255,255,0.6); }
+
+    /* Upgrade nudge */
+    .upgrade-nudge {
+      background: var(--brand-light); border: 1px solid rgba(74,140,127,0.25);
+      border-radius: var(--r-md); padding: 1.25rem;
+      display: flex; align-items: center; gap: 1rem; margin-top: 1rem;
+    }
+    .upgrade-nudge i { font-size: 24px; color: var(--brand); flex-shrink: 0; }
+    .upgrade-nudge-text { flex: 1; }
+    .upgrade-nudge-text strong { font-size: 13px; color: var(--ink); display: block; margin-bottom: 2px; }
+    .upgrade-nudge-text span { font-size: 12px; color: var(--ink-muted); font-weight: 300; }
+    .upgrade-nudge-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      background: var(--brand); color: #fff; border: none;
+      border-radius: var(--r-sm); padding: 8px 14px; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .upgrade-nudge-btn:hover { background: var(--brand-dark); }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="container">
+      <nav class="nav-inner">
+        <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
+        <div class="nav-links">
+          <a href="eventos.html" class="nav-link">Eventos</a>
+          <a href="assinatura.html" class="nav-link">Planos</a>
+          <a href="comunidade.html" class="nav-link">Comunidade</a>
+          <a href="parceiros.html" class="nav-link">Parceiros</a>
+          <a href="perfil.html" class="nav-link" style="color:var(--ink);font-weight:500;">O meu perfil</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="profile-hero">
+    <div class="container">
+      <div class="profile-hero-inner">
+        <div class="profile-avatar" id="hero-avatar">?</div>
+        <div class="profile-hero-info">
+          <div class="profile-plan-badge free" id="plan-badge">Membro Free</div>
+          <div class="profile-hero-name" id="hero-name">Jogador</div>
+          <div class="profile-hero-meta">
+            <span><i class="ti ti-map-pin"></i> <span id="hero-local">Aveiro</span></span>
+            <span><i class="ti ti-calendar"></i> Membro desde Mai 2026</span>
+            <span><i class="ti ti-hash"></i> #00241</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-tabs">
+        <button class="profile-tab active">Resumo</button>
+        <button class="profile-tab">Eventos</button>
+        <button class="profile-tab">Ranking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="profile-content">
+    <div class="container">
+      <div class="profile-grid">
+
+        <!-- Col esquerda -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- Stats -->
+          <div class="profile-card" style="padding:0;overflow:hidden;">
+            <div class="stats-row">
+              <div class="stat-cell">
+                <div class="stat-num">7</div>
+                <div class="stat-label">Jogos</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-num">441</div>
+                <div class="stat-label">Pontos</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-num">#7</div>
+                <div class="stat-label">Ranking</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dados pessoais -->
+          <div class="profile-card">
+            <div class="profile-card-title"><i class="ti ti-user"></i> Dados pessoais</div>
+            <div class="data-row">
+              <span class="data-label">Nome</span>
+              <span class="data-value" id="data-nome">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Email</span>
+              <span class="data-value" id="data-email">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Localização</span>
+              <span class="data-value" id="data-local">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Ano de nascimento</span>
+              <span class="data-value" id="data-ano">—</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Nível</span>
+              <span class="data-value" id="data-nivel">—</span>
+            </div>
+            <div class="data-row" style="border-bottom:none;align-items:flex-start;padding-top:0.85rem;">
+              <span class="data-label">Modalidades</span>
+              <div class="modal-chips-display" id="data-modalidades"></div>
+            </div>
+          </div>
+
+          <!-- Cartão de membro -->
+          <div class="profile-card">
+            <div class="profile-card-title"><i class="ti ti-id-badge"></i> Cartão de membro</div>
+            <div class="mini-card">
+              <div class="mini-card-grid"></div>
+              <div class="mini-card-top">
+                <span class="mini-card-logo">Liga<span>Local</span></span>
+                <span class="mini-card-badge" id="mini-badge">Free</span>
+              </div>
+              <div class="mini-card-name" id="mini-name">Jogador</div>
+              <div class="mini-card-loc"><i class="ti ti-map-pin" style="font-size:11px;"></i> <span id="mini-local">Aveiro</span></div>
+              <div class="mini-card-num">Nº <strong>#00241</strong></div>
+            </div>
+            <div id="upgrade-block"></div>
+          </div>
+
+        </div>
+
+        <!-- Col direita -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- Ranking -->
+          <div class="profile-card">
+            <div class="profile-card-title"><i class="ti ti-trophy"></i> Ranking de Aveiro — Maio</div>
+            <div class="rank-highlight">
+              <div class="rank-pos">#7</div>
+              <div class="rank-info">
+                <div class="rank-info-label">A tua posição</div>
+                <div class="rank-info-pts">441 pontos</div>
+                <div class="rank-info-sub">+63 pts esta semana</div>
+              </div>
+            </div>
+            <div class="rank-nearby">
+              <div class="rank-nearby-row">
+                <span class="rank-nearby-pos">5</span>
+                <div class="rank-nearby-avatar">LP</div>
+                <span class="rank-nearby-name">Luís Pereira</span>
+                <span class="rank-nearby-pts">521 pts</span>
+              </div>
+              <div class="rank-nearby-row">
+                <span class="rank-nearby-pos">6</span>
+                <div class="rank-nearby-avatar">AC</div>
+                <span class="rank-nearby-name">Ana Costa</span>
+                <span class="rank-nearby-pts">478 pts</span>
+              </div>
+              <div class="rank-nearby-row me">
+                <span class="rank-nearby-pos">7</span>
+                <div class="rank-nearby-avatar" id="rank-avatar">—</div>
+                <span class="rank-nearby-name" id="rank-name">Tu</span>
+                <span class="rank-nearby-pts">441 pts</span>
+              </div>
+              <div class="rank-nearby-row">
+                <span class="rank-nearby-pos">8</span>
+                <div class="rank-nearby-avatar">RP</div>
+                <span class="rank-nearby-name">Rui Pinheiro</span>
+                <span class="rank-nearby-pts">398 pts</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Eventos recentes -->
+          <div class="profile-card">
+            <div class="profile-card-title"><i class="ti ti-calendar-check"></i> Últimos jogos</div>
+            <div class="event-row">
+              <div class="event-row-icon"><i class="ti ti-ball-football"></i></div>
+              <div class="event-row-info">
+                <div class="event-row-name">Liga Local Verão — Grupo A</div>
+                <div class="event-row-meta">24 Mai · Campo Municipal, Aveiro</div>
+              </div>
+              <span class="event-row-pts">+72 pts</span>
+            </div>
+            <div class="event-row">
+              <div class="event-row-icon"><i class="ti ti-racket"></i></div>
+              <div class="event-row-info">
+                <div class="event-row-name">Padel Aberto — Duplas</div>
+                <div class="event-row-meta">17 Mai · Padel Center Aveiro</div>
+              </div>
+              <span class="event-row-pts">+58 pts</span>
+            </div>
+            <div class="event-row">
+              <div class="event-row-icon"><i class="ti ti-ball-basketball"></i></div>
+              <div class="event-row-info">
+                <div class="event-row-name">Pickup Basket — Sextas</div>
+                <div class="event-row-meta">10 Mai · Parque da Balsa</div>
+              </div>
+              <span class="event-row-pts">+45 pts</span>
+            </div>
+            <div class="event-row">
+              <div class="event-row-icon"><i class="ti ti-ball-football"></i></div>
+              <div class="event-row-info">
+                <div class="event-row-name">Torneio de Verão — Grupo B</div>
+                <div class="event-row-meta">3 Mai · Campo Municipal, Aveiro</div>
+              </div>
+              <span class="event-row-pts">+66 pts</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <span class="footer-logo">Liga<span>Local</span></span>
+          <span class="footer-location"> · Aveiro</span>
+        </div>
+        <div class="footer-links">
+          <a href="privacidade.html" class="footer-link">Política de Privacidade</a>
+          <a href="termos.html" class="footer-link">Termos de Serviço</a>
+          <a href="contacto.html" class="footer-link">Contacto</a>
+        </div>
+        <span class="footer-copy">© 2026 Liga Local</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    var localLabels = {
+      aveiro: 'Aveiro cidade', ilhavo: 'Ílhavo', ovar: 'Ovar',
+      agueda: 'Águeda', oliveira: 'Oliveira do Bairro',
+      estarreja: 'Estarreja', murtosa: 'Murtosa', outra: 'Outra'
+    };
+    var nivelLabels = { casual: 'Casual', intermedio: 'Intermédio', competitivo: 'Competitivo' };
+    var modalLabels = {
+      futebol: 'Futebol', basquetebol: 'Basquetebol', futsal: 'Futsal',
+      padel: 'Padel', voleibol: 'Voleibol',
+      natacao: 'Natação', tenis: 'Ténis', badminton: 'Badminton',
+      atletismo: 'Atletismo', ciclismo: 'Ciclismo', andebol: 'Andebol',
+      crossfit: 'CrossFit', 'artes-marciais': 'Artes Marciais'
+    };
+    var modalIcons = {
+      futebol: 'ti-ball-football', basquetebol: 'ti-ball-basketball',
+      futsal: 'ti-ball-football', padel: 'ti-racket',
+      voleibol: 'ti-ball-volleyball', natacao: 'ti-ripple',
+      tenis: 'ti-ball-tennis', badminton: 'ti-feather',
+      atletismo: 'ti-run', ciclismo: 'ti-bike', andebol: 'ti-ball',
+      crossfit: 'ti-barbell', 'artes-marciais': 'ti-shield'
+    };
+
+    (function () {
+      var state = {};
+      try {
+        var saved = localStorage.getItem('ll_state');
+        if (saved) state = JSON.parse(saved);
+      } catch (e) {}
+
+      var nome       = state.nome       || 'Jogador';
+      var email      = state.email      || '—';
+      var local      = state.localidade || '';
+      var ano        = state.ano        || '—';
+      var nivel      = state.nivel      || '';
+      var modalidades = state.modalidades || [];
+      var plano      = localStorage.getItem('ll_plano') || 'free';
+
+      var initials = nome.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase() || '?';
+      var firstName = nome.split(' ')[0];
+      var locLabel  = localLabels[local] || 'Aveiro';
+
+      /* Hero */
+      document.getElementById('hero-avatar').textContent = initials;
+      document.getElementById('hero-name').textContent   = nome;
+      document.getElementById('hero-local').textContent  = locLabel;
+
+      /* Plan badge */
+      var badge = document.getElementById('plan-badge');
+      if (plano === 'premium') {
+        badge.textContent = '★ Premium';
+        badge.classList.remove('free');
+        badge.classList.add('premium');
+      }
+
+      /* Dados */
+      document.getElementById('data-nome').textContent  = nome;
+      document.getElementById('data-email').textContent = email;
+      document.getElementById('data-local').textContent = locLabel;
+      document.getElementById('data-ano').textContent   = ano;
+      document.getElementById('data-nivel').textContent = nivelLabels[nivel] || 'Não indicado';
+
+      /* Modalidades chips */
+      var chipsEl = document.getElementById('data-modalidades');
+      if (modalidades.length) {
+        chipsEl.innerHTML = modalidades.map(function (m) {
+          return '<span class="modal-chip-display"><i class="ti ' + (modalIcons[m] || 'ti-activity') + '"></i>' + (modalLabels[m] || m) + '</span>';
+        }).join('');
+      } else {
+        chipsEl.innerHTML = '<span style="font-size:13px;color:var(--ink-muted);font-weight:300;">Não indicado</span>';
+      }
+
+      /* Mini card */
+      document.getElementById('mini-name').textContent  = nome;
+      document.getElementById('mini-local').textContent = locLabel;
+      var miniBadge = document.getElementById('mini-badge');
+      if (plano === 'premium') {
+        miniBadge.textContent = 'Premium';
+        miniBadge.style.background = 'rgba(159,225,203,0.18)';
+        miniBadge.style.color = '#9FE1CB';
+      }
+
+      /* Upgrade nudge (só free) */
+      if (plano !== 'premium') {
+        document.getElementById('upgrade-block').innerHTML =
+          '<div class="upgrade-nudge">' +
+            '<i class="ti ti-crown"></i>' +
+            '<div class="upgrade-nudge-text">' +
+              '<strong>Faz upgrade para Premium</strong>' +
+              '<span>Acesso a mais eventos, ranking completo e descontos de parceiros.</span>' +
+            '</div>' +
+            '<button class="upgrade-nudge-btn" onclick="window.location.href=\'assinatura.html\'">Ver plano</button>' +
+          '</div>';
+      }
+
+      /* Ranking avatar */
+      document.getElementById('rank-avatar').textContent = initials;
+      document.getElementById('rank-name').textContent   = firstName || 'Tu';
+    })();
+  </script>
+
+</body>
+</html>
