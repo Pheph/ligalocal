@@ -479,11 +479,12 @@
     <div class="brand"><span class="b">Liga</span><span class="l">Local</span></div>
     <ul class="nav-links">
       <li><a href="eventos.html">Eventos</a></li>
-      <li><span style="opacity:0.4;cursor:default;">Ranking</span></li>
+      <li><a href="ranking.html">Ranking</a></li>
       <li><a href="parceiros.html">Parceiros</a></li>
       <li><a href="comunidade.html">Comunidade</a></li>
+      <li><a href="perfil.html">O meu perfil</a></li>
     </ul>
-    <div class="premium-badge">★ Premium</div>
+    <div class="premium-badge" id="nl-premium-badge">★ Premium</div>
   </nav>
 
   <!-- ── HERO ── -->
@@ -597,7 +598,7 @@
   </section>
 
   <!-- ── EVENTS GRID ── -->
-  <section class="events">
+  <section class="events" id="eventos">
     <div class="section-hdr">
       <div class="section-label">Para o teu perfil</div>
       <h2>Eventos desta semana</h2>
@@ -626,7 +627,7 @@
         </div>
         <div class="event-footer">
           <span class="event-vagas"><span class="urgente">4 vagas</span> restantes</span>
-          <button class="event-btn">Inscrever</button>
+          <button class="event-btn" onclick="npOpenModal('Futebol','Torneio de Verão — Grupo A','Sábado, 31 Mai · 10:00','Campo Municipal, Aveiro')">Inscrever</button>
         </div>
       </div>
 
@@ -652,7 +653,7 @@
         </div>
         <div class="event-footer">
           <span class="event-vagas"><span class="ok">8 vagas</span> disponíveis</span>
-          <button class="event-btn">Inscrever</button>
+          <button class="event-btn" onclick="npOpenModal('Padel','Padel Aberto — Duplas Mistas','Domingo, 01 Jun · 09:00','Padel Center Aveiro')">Inscrever</button>
         </div>
       </div>
 
@@ -678,7 +679,7 @@
         </div>
         <div class="event-footer">
           <span class="event-vagas"><span class="ok">12 vagas</span> disponíveis</span>
-          <button class="event-btn">Inscrever</button>
+          <button class="event-btn" onclick="npOpenModal('Basquetebol','Liga 3×3 — Ronda 4','Sábado, 31 Mai · 15:00','Pavilhão Infante D. Pedro')">Inscrever</button>
         </div>
       </div>
 
@@ -704,7 +705,7 @@
         </div>
         <div class="event-footer">
           <span class="event-vagas"><span class="urgente">2 vagas</span> restantes</span>
-          <button class="event-btn">Inscrever</button>
+          <button class="event-btn" onclick="npOpenModal('Voleibol','Volei de Praia — Abertura de Verão','Domingo, 01 Jun · 11:00','Praia da Barra, Ílhavo')">Inscrever</button>
         </div>
       </div>
 
@@ -716,10 +717,10 @@
     <div class="ranking-card">
       <div class="ranking-header">
         <h3>Ranking de Aveiro — Maio</h3>
-        <span class="ranking-view">
+        <a href="ranking.html" class="ranking-view">
           Ver completo
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-        </span>
+        </a>
       </div>
       <div class="ranking-rows">
         <div class="ranking-row">
@@ -815,7 +816,92 @@
     <span class="footer-copy">© 2026 Liga Local · Aveiro</span>
   </footer>
 
+  <!-- Modal inscrição -->
+  <div id="np-overlay" onclick="if(event.target===this)npCloseModal()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(14,21,18,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#1a2e26;border:1px solid rgba(255,255,255,.1);border-radius:16px;width:100%;max-width:380px;padding:1.75rem;position:relative;">
+      <button onclick="npCloseModal()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.08);border:none;border-radius:50%;width:30px;height:30px;color:#aab2ad;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      <div id="np-modal-body"></div>
+    </div>
+  </div>
+
   <script>
+    var npCurrentSignup = null;
+
+    function npOpenModal(sport, titulo, data, local) {
+      npCurrentSignup = { sport: sport, titulo: titulo, data: data, local: local };
+      document.getElementById('np-modal-body').innerHTML =
+        '<div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#2ec48a;background:rgba(46,196,138,.12);padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:.6rem;">' + sport + '</div>' +
+        '<h2 style="font-family:Fraunces,serif;font-size:20px;color:#f3f5f3;margin-bottom:.25rem;">' + titulo + '</h2>' +
+        '<p style="font-size:13px;color:#aab2ad;font-weight:300;margin-bottom:1.25rem;">Preenche os teus dados para garantir o teu lugar.</p>' +
+        '<div style="background:rgba(255,255,255,.05);border-radius:10px;padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;flex-direction:column;gap:5px;">' +
+          '<div style="font-size:13px;color:#aab2ad;display:flex;align-items:center;gap:8px;">📅 ' + data + '</div>' +
+          '<div style="font-size:13px;color:#aab2ad;display:flex;align-items:center;gap:8px;">📍 ' + local + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom:1rem;">' +
+          '<label style="display:block;font-size:13px;font-weight:500;color:#f3f5f3;margin-bottom:5px;">Nome próprio</label>' +
+          '<input type="text" id="np-nome" placeholder="Ex: João Silva" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;color:#f3f5f3;font-size:14px;outline:none;" />' +
+        '</div>' +
+        '<div style="margin-bottom:1.25rem;">' +
+          '<label style="display:block;font-size:13px;font-weight:500;color:#f3f5f3;margin-bottom:5px;">Email <span style="color:#f87171">*</span></label>' +
+          '<input type="email" id="np-email" placeholder="o.teu@email.com" style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;color:#f3f5f3;font-size:14px;outline:none;" />' +
+          '<p id="np-err" style="display:none;font-size:12px;color:#f87171;margin-top:4px;">Introduz um email válido.</p>' +
+        '</div>' +
+        '<button onclick="npSubmit()" style="width:100%;background:#2ec48a;color:#0a1410;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;">Confirmar inscrição</button>';
+      var ov = document.getElementById('np-overlay');
+      ov.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function npSubmit() {
+      var email = document.getElementById('np-email').value.trim();
+      var err   = document.getElementById('np-err');
+      err.style.display = 'none';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.style.display = 'block'; return; }
+      npSaveInscricao(npCurrentSignup);
+      document.getElementById('np-modal-body').innerHTML =
+        '<div style="text-align:center;padding:.75rem 0;">' +
+          '<div style="font-size:44px;color:#2ec48a;margin-bottom:.75rem;">✓</div>' +
+          '<h3 style="font-family:Fraunces,serif;font-size:20px;color:#f3f5f3;margin-bottom:.3rem;">Inscrição confirmada!</h3>' +
+          '<p style="font-size:13px;color:#aab2ad;font-weight:300;">Vais receber um email de confirmação em breve.<br>Até lá — aquece bem!</p>' +
+        '</div>';
+    }
+
+    function npSaveInscricao(item) {
+      if (!item) return;
+      var sportMap = {
+        Futebol: 'futebol',
+        Padel: 'padel',
+        Basquetebol: 'basquetebol',
+        Voleibol: 'voleibol'
+      };
+      var inscricoes = [];
+      try {
+        inscricoes = JSON.parse(localStorage.getItem('ll_inscricoes') || '[]');
+      } catch(e) {}
+
+      var entry = {
+        modalidade: sportMap[item.sport] || item.sport.toLowerCase(),
+        modalidadeLabel: item.sport,
+        titulo: item.titulo,
+        data: item.data,
+        local: item.local,
+        plano: 'premium',
+        createdAt: new Date().toISOString()
+      };
+      var exists = inscricoes.some(function(i) {
+        return i.titulo === entry.titulo && i.data === entry.data && i.local === entry.local;
+      });
+      if (!exists) {
+        inscricoes.unshift(entry);
+        localStorage.setItem('ll_inscricoes', JSON.stringify(inscricoes.slice(0, 12)));
+      }
+    }
+
+    function npCloseModal() {
+      document.getElementById('np-overlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
     function copiarCodigo() {
       navigator.clipboard.writeText('LIGALOCAL10').then(function () {
         var btn = document.getElementById('copyBtn');
@@ -830,16 +916,42 @@
       });
     }
 
-    /* Personalização via URL param ?nome=João */
+    /* Personalização — ll_profile (localStorage) + fallback URL param */
     (function () {
+      var profile = {};
+      try { var p = localStorage.getItem('ll_profile'); if(p) profile = JSON.parse(p); } catch(e){}
+
       var params = new URLSearchParams(window.location.search);
-      var nome = params.get('nome');
+      var nome   = profile.nome || params.get('nome') || '';
+      var modalidades = profile.modalidades || [];
+      var modalLabels = {
+        futebol:'Futebol', basquetebol:'Basquetebol', futsal:'Futsal',
+        padel:'Padel', voleibol:'Voleibol', natacao:'Natação', tenis:'Ténis',
+        badminton:'Badminton', atletismo:'Atletismo', ciclismo:'Ciclismo',
+        andebol:'Andebol', crossfit:'CrossFit', 'artes-marciais':'Artes Marciais'
+      };
+
       if (nome) {
-        var initials = nome.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+        var firstName = nome.split(' ')[0];
+        var initials  = nome.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+
+        /* Badge no navbar */
+        var badge = document.getElementById('nl-premium-badge');
+        if (badge) badge.textContent = '★ ' + firstName;
+
+        /* Ranking */
         var myAvatar = document.getElementById('my-avatar');
         var myName   = document.getElementById('my-name');
         if (myAvatar) myAvatar.textContent = initials;
-        if (myName)   myName.textContent   = nome.split(' ')[0];
+        if (myName)   myName.textContent   = firstName;
+
+        /* Desportos na hero-card */
+        if (modalidades.length) {
+          var heroCard = document.querySelector('.hero-card p');
+          if (heroCard) {
+            heroCard.textContent = 'Esta semana tens eventos disponíveis perto de ti em ' + modalidades.map(function(m){ return modalLabels[m]||m; }).join(', ') + ', escolhidos para o teu nível.';
+          }
+        }
       }
     })();
   </script>

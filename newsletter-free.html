@@ -444,9 +444,9 @@
       <nav class="nl-links">
         <a href="eventos.html">Eventos</a>
         <a href="assinatura.html">Planos</a>
-        <a href="#">Comunidade</a>
+        <a href="perfil.html">O meu perfil</a>
       </nav>
-      <div class="nl-badge-free">Membro Free</div>
+      <div class="nl-badge-free" id="nl-badge-name">Membro Free</div>
     </div>
   </header>
 
@@ -711,8 +711,10 @@
   <script>
     /* ── Modal de inscrição ── */
     var sportLabels = { futebol: 'Futebol', voleibol: 'Voleibol', padel: 'Padel', basquetebol: 'Basquetebol' };
+    var nlCurrentSignup = null;
 
     function nlOpenModal(sport, titulo, data, local) {
+      nlCurrentSignup = { sport: sport, titulo: titulo, data: data, local: local };
       document.getElementById('nl-modal-body').innerHTML =
         '<span class="nl-modal-tag">' + (sportLabels[sport] || sport) + '</span>' +
         '<h2>' + titulo + '</h2>' +
@@ -744,12 +746,38 @@
         document.getElementById('nl-email').style.borderColor = '#c0392b';
         return;
       }
+      nlSaveInscricao(nlCurrentSignup);
       document.getElementById('nl-modal-body').innerHTML =
         '<div class="nl-modal-success">' +
           '<i class="ti ti-circle-check"></i>' +
           '<h3>Inscrição confirmada!</h3>' +
           '<p>Vais receber um email de confirmação em breve.<br>Até lá — aquece bem!</p>' +
         '</div>';
+    }
+
+    function nlSaveInscricao(item) {
+      if (!item) return;
+      var inscricoes = [];
+      try {
+        inscricoes = JSON.parse(localStorage.getItem('ll_inscricoes') || '[]');
+      } catch(e) {}
+
+      var entry = {
+        modalidade: item.sport,
+        modalidadeLabel: sportLabels[item.sport] || item.sport,
+        titulo: item.titulo,
+        data: item.data,
+        local: item.local,
+        plano: localStorage.getItem('ll_plano') || 'free',
+        createdAt: new Date().toISOString()
+      };
+      var exists = inscricoes.some(function(i) {
+        return i.titulo === entry.titulo && i.data === entry.data && i.local === entry.local;
+      });
+      if (!exists) {
+        inscricoes.unshift(entry);
+        localStorage.setItem('ll_inscricoes', JSON.stringify(inscricoes.slice(0, 12)));
+      }
     }
 
     function nlCloseModal() {
@@ -838,15 +866,35 @@
       }
     });
 
-    /* Personalização via URL params */
+    /* Personalização — ll_profile (localStorage) + fallback URL param */
     (function () {
-      var params = new URLSearchParams(window.location.search);
-      var nome = params.get('nome');
+      var profile = {};
+      try { var p = localStorage.getItem('ll_profile'); if(p) profile = JSON.parse(p); } catch(e){}
+
+      var params    = new URLSearchParams(window.location.search);
+      var nome      = profile.nome || params.get('nome') || '';
+      var modalidades = profile.modalidades || [];
+      var modalLabels = {
+        futebol:'Futebol', basquetebol:'Basquetebol', futsal:'Futsal',
+        padel:'Padel', voleibol:'Voleibol', natacao:'Natação', tenis:'Ténis',
+        badminton:'Badminton', atletismo:'Atletismo', ciclismo:'Ciclismo',
+        andebol:'Andebol', crossfit:'CrossFit', 'artes-marciais':'Artes Marciais'
+      };
+
       if (nome) {
         var firstName = nome.split(' ')[0];
+
+        /* Badge no navbar */
+        var badge = document.getElementById('nl-badge-name');
+        if (badge) badge.textContent = 'Olá, ' + firstName;
+
+        /* Saudação no hero */
         var heroSub = document.querySelector('.nl-hero-sub');
         if (heroSub) {
-          heroSub.textContent = 'Olá ' + firstName + '! A tua conta está ativa. Começa a explorar eventos na tua cidade, filtra por modalidade e encontra o teu próximo jogo.';
+          var modalStr = modalidades.length
+            ? ' Os teus desportos: ' + modalidades.map(function(m){ return modalLabels[m]||m; }).join(', ') + '.'
+            : '';
+          heroSub.textContent = 'Olá ' + firstName + '! A tua conta está ativa.' + modalStr + ' Começa a explorar eventos na tua cidade e encontra o teu próximo jogo.';
         }
       }
     })();

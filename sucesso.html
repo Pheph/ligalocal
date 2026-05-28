@@ -258,6 +258,17 @@
 
       localStorage.clear();
 
+      /* Guardar perfil para newsletters e perfil.html */
+      localStorage.setItem('ll_profile', JSON.stringify({
+        nome:        nome,
+        email:       state.email || '',
+        localidade:  local,
+        ano:         state.ano || '',
+        modalidades: state.modalidades || [],
+        nivel:       nivel,
+        plano:       plano
+      }));
+
       /* Heading */
       var firstName = nome ? nome.split(' ')[0] : '';
       var headingEl = document.getElementById('heading');

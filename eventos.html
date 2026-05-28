@@ -253,13 +253,9 @@
       <nav class="nav-inner">
         <a href="index.html" class="nav-logo">Liga<span>Local</span></a>
         <div class="nav-links">
-          <a href="index.html" class="nav-link">Início</a>
-          <a href="index.html#como-funciona" class="nav-link">Como funciona</a>
           <a href="eventos.html" class="nav-link">Eventos</a>
-          <a href="assinatura.html" class="nav-link">Planos</a>
           <a href="comunidade.html" class="nav-link">Comunidade</a>
           <a href="parceiros.html" class="nav-link">Parceiros</a>
-          <a href="etapa1.html" class="nav-cta">Entrar na liga</a>
         </div>
       </nav>
     </div>
@@ -275,8 +271,8 @@
       </div>
 
       <!-- Filtros -->
-      <div class="filters">
-        <button class="filter-btn active" onclick="filter('todos', this)">Todos</button>
+      <div class="filters" id="filters-bar">
+        <button class="filter-btn active" id="btn-todos" onclick="filter('todos', this)">Todos</button>
         <button class="filter-btn" onclick="filter('futebol', this)">Futebol</button>
         <button class="filter-btn" onclick="filter('basquetebol', this)">Basquetebol</button>
         <button class="filter-btn" onclick="filter('padel', this)">Padel</button>
@@ -404,7 +400,9 @@
       var grid = document.getElementById('events-grid');
       var filtered = f === 'todos'
         ? events
-        : events.filter(function(e) { return e.modalidade === f || e.zona === f; });
+        : Array.isArray(f)
+          ? events.filter(function(e) { return f.indexOf(e.modalidade) !== -1 || f.indexOf(e.zona) !== -1; })
+          : events.filter(function(e) { return e.modalidade === f || e.zona === f; });
 
       if (filtered.length === 0) {
         grid.innerHTML = '<div class="empty-state"><i class="ti ti-calendar-off"></i>Sem eventos para este filtro.</div>';
@@ -445,12 +443,6 @@
       }).join('');
     }
 
-    function filter(f, btn) {
-      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      renderEvents(f);
-    }
-
     function openModal(id) {
       var e = events.find(function(ev) { return ev.id === id; });
       document.getElementById('modal-body').innerHTML =
@@ -478,6 +470,7 @@
     }
 
     function submitInscricao(id) {
+      var e = events.find(function(ev) { return ev.id === id; });
       var email = document.getElementById('m-email').value.trim();
       var errEl = document.getElementById('err-modal-email');
       errEl.style.display = 'none';
@@ -488,12 +481,37 @@
         return;
       }
 
+      saveInscricao({
+        modalidade: e.modalidade,
+        modalidadeLabel: e.tag,
+        titulo: e.nome,
+        data: e.data + ' · ' + e.hora,
+        local: e.local,
+        plano: localStorage.getItem('ll_plano') || 'free'
+      });
+
       document.getElementById('modal-body').innerHTML =
         '<div class="modal-success">' +
           '<i class="ti ti-circle-check" aria-hidden="true"></i>' +
           '<h3>Inscrição confirmada!</h3>' +
           '<p>Vais receber um email de confirmação em breve.<br>Até lá — aquece bem!</p>' +
         '</div>';
+    }
+
+    function saveInscricao(item) {
+      var inscricoes = [];
+      try {
+        inscricoes = JSON.parse(localStorage.getItem('ll_inscricoes') || '[]');
+      } catch(e) {}
+
+      var exists = inscricoes.some(function(i) {
+        return i.titulo === item.titulo && i.data === item.data && i.local === item.local;
+      });
+      if (!exists) {
+        item.createdAt = new Date().toISOString();
+        inscricoes.unshift(item);
+        localStorage.setItem('ll_inscricoes', JSON.stringify(inscricoes.slice(0, 12)));
+      }
     }
 
     function closeModal() {
@@ -511,7 +529,44 @@
       }
     });
 
-    renderEvents('todos');
+    /* Personalização pelo perfil */
+    (function () {
+      var profile = {};
+      try { var p = localStorage.getItem('ll_profile'); if(p) profile = JSON.parse(p); } catch(e){}
+      var modalidades = profile.modalidades || [];
+
+      if (modalidades.length) {
+        /* Botão "Para ti" no início da barra de filtros */
+        var bar    = document.getElementById('filters-bar');
+        var btnTodos = document.getElementById('btn-todos');
+        var btnParaTi = document.createElement('button');
+        btnParaTi.className = 'filter-btn active';
+        btnParaTi.id = 'btn-para-ti';
+        btnParaTi.textContent = '✦ Para ti';
+        btnParaTi.onclick = function () { filterParaTi(this); };
+        bar.insertBefore(btnParaTi, btnTodos);
+        btnTodos.classList.remove('active');
+
+        /* Auto-filtrar pelos desportos do perfil */
+        renderEvents(modalidades);
+      } else {
+        renderEvents('todos');
+      }
+    })();
+
+    function filterParaTi(btn) {
+      var profile = {};
+      try { var p = localStorage.getItem('ll_profile'); if(p) profile = JSON.parse(p); } catch(e){}
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderEvents(profile.modalidades || 'todos');
+    }
+
+    function filter(f, btn) {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderEvents(f);
+    }
   </script>
 
 </body>

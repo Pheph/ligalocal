@@ -295,8 +295,25 @@
   <script src="js/main.js"></script>
   <script>
     function choosePlan(plan) {
+      if (plan === 'premium' && hasExistingProfile()) {
+        window.location.href = 'pagamento.html';
+        return;
+      }
+
       localStorage.setItem('ll_plano', plan);
       window.location.href = 'etapa1.html';
+    }
+
+    function hasExistingProfile() {
+      try {
+        var profile = JSON.parse(localStorage.getItem('ll_profile') || '{}');
+        if (profile.email || profile.nome) return true;
+
+        var state = JSON.parse(localStorage.getItem('ll_state') || '{}');
+        return Boolean(state.email || state.nome);
+      } catch (e) {
+        return Boolean(localStorage.getItem('ll_email') || localStorage.getItem('ll_nome'));
+      }
     }
 
     function toggleFaq(el) {

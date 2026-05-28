@@ -171,7 +171,8 @@
     const EMAILJS_SERVICE_ID  = 'service_kcu8u2e';
     const EMAILJS_TEMPLATE_ID = 'template_36p7z8t';
 
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+    const canUseEmailJS = typeof emailjs !== 'undefined';
+    if (canUseEmailJS) emailjs.init(EMAILJS_PUBLIC_KEY);
 
     /* ── Mapeamento de labels ── */
     const localLabels = {
@@ -311,6 +312,12 @@
       const plano     = localStorage.getItem('ll_plano') || 'free';
       const planoTxt  = plano === 'premium' ? 'Premium (7 dias grátis, depois 49,20€/mês)' : 'Gratuito';
 
+      const nextPage = plano === 'premium' ? 'pagamento.html' : 'sucesso.html';
+      if (!canUseEmailJS) {
+        window.location.href = nextPage;
+        return;
+      }
+
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_name:         nome        || 'Jogador',
         to_email:        email,
@@ -321,10 +328,10 @@
         frequencia:      freqLabels[state.frequencia]        || 'Não indicado',
         plano:           planoTxt,
       }).then(() => {
-        window.location.href = 'sucesso.html';
+        window.location.href = nextPage;
       }).catch(() => {
         // Redireciona mesmo assim — não bloqueia o utilizador por falha de email
-        window.location.href = 'sucesso.html';
+        window.location.href = nextPage;
       });
     }
   </script>
